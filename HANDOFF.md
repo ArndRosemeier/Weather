@@ -1,11 +1,15 @@
 # Handoff
 
-**State (2026-10-19T16:29Z):** DONE, verified and pushed. Latest full gate on
-`364c39b`: **exit 0**, 41/41 unit (10 files), 14 E2E passed / 1 skipped, 31 s.
-That landing adds the 7/10/16-day horizon selector (GFS reaches 16 d, IFS 15 d)
-and adapts the harness to the `/weather/` sub-path deployment (`4ce3ce2`, made
-by another session and not in this journal). Earlier landings: MIT license,
-day-bounded chart, provider tooltips. Full gate on
+**State (2026-10-19T16:35Z):** DONE, verified and pushed. Latest full gate on
+`9708148`: **exit 0**, 45/45 unit (11 files), 15 E2E passed / 1 skipped, 31 s.
+That landing introduces **version 1.00** with a What's-new history and the
+release command. Earlier landings: 7/10/16-day horizon, `/weather/` deploy
+reconciliation, MIT license, day-bounded chart, provider tooltips.
+
+**Version rule (owner):** the visible version rises by **0.01 on every push**.
+Before the next push: `pnpm release --title "…" --note "…"` (writes
+`src/data/version.json` and `package.json`), then commit, gate, push. Next
+version is 1.01. Full gate on
 `db014a0` — **exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped, 25 s,
 lock acquired. Repository public at `https://github.com/ArndRosemeier/Weather`; live at
 `https://apps.futuremagic.de/weather/` (the deployed build lags HEAD until a
