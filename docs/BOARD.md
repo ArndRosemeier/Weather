@@ -29,6 +29,12 @@ LANDED | row=16 | sha=7ce191e | verify=MY OWN: 7-day and 48h chart screenshots i
 GATE | tier=full | sha=c9045c2 | exit=0 | unit=39/39 (9 files) | e2e=13 passed, 1 skipped (opt-in live) | duration=29s | lock=acquired | log=.gate-logs/gate-c9045c2.log
 
 LANDED | row=17 | sha=c9045c2 | verify=MY OWN: tooltip screenshot inspected (hover card over the table), 39/39 unit, 13 E2E incl. hover/focus/Escape | provider tooltips + Coverage wording fix | docs=ledger row 17
+
+DEPLOY | sha=4ce3ce2 | base=/weather/ | live=https://apps.futuremagic.de/weather/ (200) | pushed by another DSH session; NOT in this journal — recorded here, not re-litigated | harness adapted in 364c39b
+GATE | tier=full | sha=364c39b | exit=0 | unit=41/41 (10 files) | e2e=14 passed, 1 skipped (opt-in live) | duration=31s | lock=acquired | log=.gate-logs/gate-364c39b.log
+
+LANDED | row=18 | sha=364c39b | verify=MY OWN: 16-day screenshot inspected (16 cards, 16 day labels), 41/41 unit, 14 E2E incl. forecast_days=16 request | 7/10/16 horizon selector | docs=ledger row 18
+LANDED | row=19 | sha=364c39b | verify=MY OWN: full gate under /weather/ base, manifest path test green | deploy reconciliation | docs=ledger row 19
 NOTE | exit 2 is not "the gate passed": behaviour evidence for this tree is the full run on 909d490; the code tree is identical, only prose changed.
 
 PUSH | origin=https://github.com/ArndRosemeier/Weather (public, default=main) | initial push db014a0 verified MATCH (git ls-remote == local HEAD) | rule: every record commit is pushed only after its own full gate; current sha = `git ls-remote origin refs/heads/main` | owner instruction 2026-10-19: "Please push to here" — supersedes ledger row 7 for this repo only | no deploy, no force-push

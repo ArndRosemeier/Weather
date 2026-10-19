@@ -1,13 +1,15 @@
 # Handoff
 
-**State (2026-10-19T16:01Z):** DONE, verified and pushed. Latest full gate on
-`c9045c2`: **exit 0**, 39/39 unit (9 files), 13 E2E passed / 1 skipped, 29 s.
-That landing adds provider tooltips (organisation, headquarters, models, official
-site) and fixes the Coverage column so it reports the window covered rather than
-the fetch cap. Earlier landings: MIT license, day-bounded chart with a true
-168-hour week. Full gate on
+**State (2026-10-19T16:29Z):** DONE, verified and pushed. Latest full gate on
+`364c39b`: **exit 0**, 41/41 unit (10 files), 14 E2E passed / 1 skipped, 31 s.
+That landing adds the 7/10/16-day horizon selector (GFS reaches 16 d, IFS 15 d)
+and adapts the harness to the `/weather/` sub-path deployment (`4ce3ce2`, made
+by another session and not in this journal). Earlier landings: MIT license,
+day-bounded chart, provider tooltips. Full gate on
 `db014a0` — **exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped, 25 s,
-lock acquired. Repository public at `https://github.com/ArndRosemeier/Weather`. Every commit that
+lock acquired. Repository public at `https://github.com/ArndRosemeier/Weather`; live at
+`https://apps.futuremagic.de/weather/` (the deployed build lags HEAD until a
+separate publish run — deploying is outside this session's remit). Every commit that
 reaches `main` is pushed only after its own full gate; `git ls-remote origin
 refs/heads/main` is the authority for the current sha. MIT licensed. Earlier records: full gate on `909d490`
 (exit 0) and cheap tier on `9c2965b` (exit 2, docs-only delta — not a full pass). Live contract check passed separately against the real
