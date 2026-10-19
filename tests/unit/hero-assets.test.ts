@@ -38,14 +38,20 @@ describe('generated hero assets', () => {
       expect(fs.existsSync(file), `${file} is missing — run pnpm heroes`).toBe(true)
       expect(header(file, 8).subarray(1, 4).toString('ascii')).toBe('PNG')
     }
+    // The app ships under a sub-path (currently /weather/), so manifest and HTML
+    // paths are absolute. Resolve them against the base configured for Vite.
+    const viteConfig = fs.readFileSync(path.join(process.cwd(), 'vite.config.ts'), 'utf8')
+    const base = /base:\s*'([^']+)'/.exec(viteConfig)?.[1] ?? '/'
     const manifest = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'manifest.webmanifest'), 'utf8')) as {
       icons: { src: string; purpose?: string }[]
     }
     for (const icon of manifest.icons) {
-      expect(fs.existsSync(path.join(PUBLIC, icon.src)), `${icon.src} is listed in the manifest but missing`).toBe(true)
+      expect(icon.src.startsWith(base), `${icon.src} must live under the app base ${base}`).toBe(true)
+      const file = path.join(PUBLIC, icon.src.slice(base.length))
+      expect(fs.existsSync(file), `${icon.src} is listed in the manifest but ${file} is missing`).toBe(true)
     }
     expect(manifest.icons.some((icon) => icon.purpose === 'maskable')).toBe(true)
     const html = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8')
-    expect(html).toContain('/apple-touch-icon.png')
+    expect(html).toContain(`${base}apple-touch-icon.png`)
   })
 })

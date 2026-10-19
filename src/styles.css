@@ -334,7 +334,7 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 
 /* ---------- daily ---------- */
 
-.daily { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 9px; }
+.daily { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 9px; }
 .day {
   position: relative;
   isolation: isolate;

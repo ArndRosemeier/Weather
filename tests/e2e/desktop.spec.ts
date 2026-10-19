@@ -29,7 +29,7 @@ test('day boundaries are marked on 48-hour and 7-day views', async ({ page }) =>
   await expect(page.getByTestId('day-separator')).toHaveCount(2)
   await expect(page.getByTestId('axis-hour').first()).toBeVisible()
 
-  await page.getByRole('button', { name: '7 days', exact: true }).click()
+  await page.getByTestId('range-all').click()
   // 168 hours from 16:00 touches eight calendar days; seven midnights are borders.
   await expect(page.getByTestId('axis-day')).toHaveCount(8)
   await expect(page.getByTestId('day-separator')).toHaveCount(7)
@@ -37,6 +37,21 @@ test('day boundaries are marked on 48-hour and 7-day views', async ({ page }) =>
   await expect(page.getByTestId('axis-hour')).toHaveCount(0)
 
   await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-7day.png' })
+})
+
+test('a 16-day horizon is selectable and fetches sixteen days', async ({ page }) => {
+  await boot(page)
+  const request = page.waitForRequest((url) => url.url().includes('forecast_days=16'))
+  await page.getByTestId('horizon-16').click()
+  await request
+
+  await expect(page.getByTestId('day-card')).toHaveCount(16)
+  await page.getByTestId('range-all').click()
+  await expect(page.getByTestId('axis-day')).toHaveCount(16)
+  await expect(page.getByTestId('axis-hour')).toHaveCount(0)
+
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.screenshot({ path: 'artifacts/desktop-16day.png', fullPage: true })
 })
 
 test('provider names explain the organisation behind a model', async ({ page }) => {

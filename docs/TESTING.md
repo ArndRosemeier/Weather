@@ -21,7 +21,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Unit | `tests/unit/wmo.test.ts` | code → label/icon, day/night hero, temperature extremes, unknown-code honesty (`HeroKey` is a compile-time union; no test pins the 14 keys to the 42 files — see *Image artefacts*) |
 | Unit | `tests/unit/cache.test.ts` | TTL, corrupt entries, storage that throws |
 | Unit | `tests/unit/hero-assets.test.ts` | all 14 hero families × 3 widths exist as real WebP; icons and manifest entries resolve |
-| E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API); includes day borders at 48 h and 7 days, a phone no-overlap check on the day rail, and provider tooltips on hover/keyboard/Escape |
+| E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API); includes day borders at 48 h and 7 days, a phone no-overlap check on the day rail, provider tooltips on hover/keyboard/Escape, and a 16-day horizon that proves `forecast_days=16` is requested |
 | Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; waits for the mounted hero bitmap, records `artifacts/live-smoke.json` |
 
 ## Fixtures
@@ -37,6 +37,9 @@ service except the opt-in live spec. Because the app now asks for one day more t
 displays, the route extends the 7-day fixture to the requested `forecast_days` by
 repeating its last day — deterministic test data, never shipped. The browser clock is
 pinned to the fixture's date so "now", and every day-boundary assertion, stays stable.
+Playwright's `baseURL` is `http://127.0.0.1:4173/weather/` (Vite `base`), tests boot
+from `./`, and the manifest is fetched relatively so the deployed sub-path is exercised
+rather than assumed.
 
 ## Image artefacts (heroes + icons)
 

@@ -236,7 +236,7 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
                 className="chart__axis chart__axis--day"
                 data-testid="axis-day"
               >
-                {wide ? `${entry.label} ${dateLabel(entry.date)}` : entry.label}
+                {wide && dayLabels.length <= 10 ? `${entry.label} ${dateLabel(entry.date)}` : entry.label}
               </text>
               )
             })}

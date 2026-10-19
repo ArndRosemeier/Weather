@@ -59,6 +59,11 @@ public/sw.js                     offline shell only — never API data
   "7 days" view is 168 hours from now rather than "the rest of today plus six days".
   The daily strip still shows `days` cards. A 168-hour window that starts mid-afternoon
   touches eight calendar dates; the axis says so rather than rounding it away.
+- **Horizon selector:** 7 / 10 / 16 days (`DAY_OPTIONS`), default 7. Sixteen is the
+  hard ceiling of the free API and the end of GFS; a 16-day window from 16:00 therefore
+  reaches to the end of the sixteenth local day, not 384 hours from now. The chart
+  labels windows over ten days by weekday only, because sixteen dated labels collide.
+  The deployment base is `/weather/` (Vite `base`); tests boot from the same base.
 - `timezone=auto` returns local ISO times plus `utc_offset_seconds`; all formatting
   uses those, never `Date`'s local zone.
 

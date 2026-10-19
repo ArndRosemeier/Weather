@@ -91,7 +91,7 @@ export async function boot(page: Page, options: BootOptions = {}): Promise<void>
     }, options.settings)
   }
 
-  await page.goto('/')
+  await page.goto('./')
   await page.getByTestId('hero-temp').waitFor()
 }
 

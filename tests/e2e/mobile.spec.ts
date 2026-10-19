@@ -21,7 +21,7 @@ test('phone layout at 390px has no horizontal overflow', async ({ page }) => {
   await page.screenshot({ path: 'artifacts/mobile-chart-390.png' })
 
   // A week on a 390 px screen: day labels must not collide.
-  await page.getByRole('button', { name: '7 days', exact: true }).click()
+  await page.getByTestId('range-all').click()
   await expect(page.getByTestId('axis-day')).toHaveCount(8)
   await expect(page.getByTestId('axis-hour')).toHaveCount(0)
   // Labels are staggered across two rows on a phone; compare only same-row pairs.

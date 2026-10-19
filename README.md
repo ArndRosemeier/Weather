@@ -7,7 +7,7 @@ select — every line attributable, every gap visible.
 One static web app. No backend, no API key, no tracking. Works on a desktop browser
 and installs as a PWA on a phone.
 
-Source: <https://github.com/ArndRosemeier/Weather>
+Source: <https://github.com/ArndRosemeier/Weather> · Live: <https://apps.futuremagic.de/weather/>
 
 ![Weather Compare on a desktop browser](docs/media/desktop.webp)
 
@@ -57,6 +57,10 @@ model table for who that organisation is.
 - **Unavailable is a state, not an error.** Some models are intermittently offline;
   they stay listed, greyed, marked "No data right now", and are excluded from the
   average. They are never rendered as zero.
+- **A 7 / 10 / 16-day horizon.** Open-Meteo caps a request at 16 days, which is also
+  the end of GFS (16 d) and beyond IFS (15 d). Longer ranges are selectable, never the
+  default: past ten days the models disagree sharply, so the spread matters more than
+  the average.
 - **Cache and offline.** Forecasts are cached in `localStorage` for 20 minutes; a
   service worker keeps the shell. An offline reload shows the last forecast with an
   explicit notice.
@@ -65,16 +69,16 @@ model table for who that organisation is.
 
 ```bash
 pnpm install
-pnpm dev          # http://localhost:5173
+pnpm dev          # http://localhost:5173/weather/
 pnpm build        # typecheck + production build
-pnpm preview      # serve the build on :4173
+pnpm preview      # http://localhost:4173/weather/
 ```
 
 ## Test it
 
 ```bash
 bash scripts/gate.sh            # the gate: build + unit + Playwright (exit 0 green)
-pnpm test:unit                  # 30 unit tests
+pnpm test:unit                  # 41 unit tests
 pnpm test:e2e                   # Playwright, 1440 px desktop and 390 px phone
 LIVE=1 pnpm test:e2e            # opt-in live contract check against Open-Meteo
 ```

@@ -4,7 +4,7 @@ import { fetchForecast } from './lib/api'
 import { aggregateDaily, aggregateHourly } from './lib/average'
 import { isFresh, readCache, writeCache } from './lib/cache'
 import { currentHourIndex, updatedLabel } from './lib/format'
-import { loadSettings, pushRecent, saveSettings, type Settings } from './lib/settings'
+import { DAY_OPTIONS, loadSettings, pushRecent, saveSettings, type Settings } from './lib/settings'
 import { formatPercent, formatPrecip, formatTemp, formatWind, precipUnit, tempUnit, windUnit } from './lib/units'
 import { heroFor, isDaylight } from './lib/wmo'
 import type { ForecastBundle, ModelStatus, WeatherLocation } from './lib/types'
@@ -291,7 +291,7 @@ export default function App() {
                   <div className="segmented" role="group" aria-label="Time range">
                     <button type="button" aria-pressed={range.mode === '24h'} onClick={() => setRange({ mode: '24h' })}>24h</button>
                     <button type="button" aria-pressed={range.mode === '48h'} onClick={() => setRange({ mode: '48h' })}>48h</button>
-                    <button type="button" aria-pressed={range.mode === 'all'} onClick={() => setRange({ mode: 'all' })}>{days} days</button>
+                    <button type="button" aria-pressed={range.mode === 'all'} data-testid="range-all" onClick={() => setRange({ mode: 'all' })}>{days} days</button>
                   </div>
                 </div>
               </div>
@@ -314,7 +314,25 @@ export default function App() {
                 <div>
                   <p className="eyebrow">The week</p>
                   <h2 className="panel__title" id="daily-title">Day by day</h2>
-                  <p className="panel__sub">Daily values are averaged per model; the bar shows the spread between the coolest and warmest model.</p>
+                  <p className="panel__sub">
+                    Daily values are averaged per model; the bar shows the spread between the coolest and warmest model.
+                    {settings.days > 10 ? ' Beyond ten days the models disagree sharply — read the spread, not just the average.' : ''}
+                  </p>
+                </div>
+                <div className="panel__controls">
+                  <div className="segmented" role="group" aria-label="Forecast length">
+                    {DAY_OPTIONS.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        aria-pressed={settings.days === option}
+                        data-testid={`horizon-${option}`}
+                        onClick={() => updateSettings({ days: option })}
+                      >
+                        {option} days
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
               <DailyStrip

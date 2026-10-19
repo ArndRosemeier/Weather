@@ -3,7 +3,7 @@ import { PRESET_LOCATIONS } from './geocode'
 import type { UnitSystem, WeatherLocation } from './types'
 
 const KEY = 'weather-compare:v1:settings'
-export const DAY_OPTIONS = [3, 7, 10, 16] as const
+export const DAY_OPTIONS = [7, 10, 16] as const
 export type DayCount = (typeof DAY_OPTIONS)[number]
 
 export interface Settings {

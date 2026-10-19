@@ -20,7 +20,7 @@ test('live Open-Meteo contract holds', async ({ page }) => {
   const spread = Math.max(...available.map((entry) => entry.hours)) - Math.min(...available.map((entry) => entry.hours))
   expect(spread).toBeGreaterThan(24)
 
-  await page.goto('/')
+  await page.goto('./')
   await page.getByTestId('hero-temp').waitFor({ timeout: 30_000 })
   // Wait for the data-driven condition, then for the bitmap that is mounted AFTER
   // it: the <img> remounts when the hero family changes, so a wait started too

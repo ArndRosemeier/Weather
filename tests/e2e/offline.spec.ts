@@ -22,7 +22,7 @@ test('works offline after one controlled visit', async ({ page, context }) => {
 test('manifest exposes an installable app', async ({ page }) => {
   await boot(page)
   const manifest = await page.evaluate(async () => {
-    const response = await fetch('/manifest.webmanifest')
+    const response = await fetch('manifest.webmanifest')
     return response.json()
   })
   expect(manifest.name).toBe('Weather Compare')
