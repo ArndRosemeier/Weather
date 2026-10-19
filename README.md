@@ -7,7 +7,7 @@ select — every line attributable, every gap visible.
 One static web app. No backend, no API key, no tracking. Works on a desktop browser
 and installs as a PWA on a phone.
 
-Source: <https://github.com/ArndRosemeier/Weather> · Live: <https://apps.futuremagic.de/weather/> · Version 1.00
+Source: <https://github.com/ArndRosemeier/Weather> · Live: <https://apps.futuremagic.de/weather/>
 
 ![Weather Compare on a desktop browser](docs/media/desktop.webp)
 
@@ -57,10 +57,12 @@ model table for who that organisation is.
 - **Unavailable is a state, not an error.** Some models are intermittently offline;
   they stay listed, greyed, marked "No data right now", and are excluded from the
   average. They are never rendered as zero.
-- **A 7 / 10 / 16-day horizon.** Open-Meteo caps a request at 16 days, which is also
-  the end of GFS (16 d) and beyond IFS (15 d). Longer ranges are selectable, never the
-  default: past ten days the models disagree sharply, so the spread matters more than
-  the average.
+- **A 7 / 10 / 16-day view.** Open-Meteo caps a request at 16 days, which is also the
+  end of GFS (16 d) and beyond IFS (15 d). The app always fetches all sixteen days, so
+  coverage is a property of the model, not of the view — each chart legend entry and
+  the comparison table says how many days that model actually covers, and switching
+  7 / 10 / 16 is instant with no refetch. Past ten days the models disagree sharply,
+  so the spread matters more than the average.
 - **Cache and offline.** Forecasts are cached in `localStorage` for 20 minutes; a
   service worker keeps the shell. An offline reload shows the last forecast with an
   explicit notice.

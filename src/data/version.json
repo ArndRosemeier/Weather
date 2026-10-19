@@ -1,6 +1,16 @@
 {
-  "version": "1.00",
+  "version": "1.01",
   "history": [
+    {
+      "version": "1.01",
+      "date": "2026-10-19",
+      "title": "Coverage in the legend",
+      "changes": [
+        "Each chart legend entry now shows the days that model covers",
+        "Coverage is measured against a full 16-day fetch, not the selected view",
+        "Changing 7 / 10 / 16 days no longer refetches"
+      ]
+    },
     {
       "version": "1.00",
       "date": "2026-10-19",

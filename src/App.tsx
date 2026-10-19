@@ -65,15 +65,16 @@ export default function App() {
 
   const { latitude, longitude } = settings.location
   const days = settings.days
-  // Fetch one day beyond the displayed window so "7 days" really is 168 hours
-  // from now, not "the rest of today plus six days". The strip still shows `days`.
-  const fetchDays = Math.min(days + 1, 16)
+  // Always fetch the API maximum. Coverage is a property of the model, not of the
+  // view: if we fetched only `days + 1`, a 15-day model would report "8.0 d" just
+  // because seven days were selected. Display range and fetch range are separate.
+  const FETCH_DAYS = 16
 
   useEffect(() => {
     const controller = new AbortController()
     let cancelled = false
     const location = settings.location
-    const cached = readCache(location.latitude, location.longitude, fetchDays)
+    const cached = readCache(location.latitude, location.longitude, FETCH_DAYS)
 
     if (cached) {
       setBundle({ ...cached.bundle, location })
@@ -87,7 +88,7 @@ export default function App() {
     setError(null)
 
     fetchForecast(
-      { latitude: location.latitude, longitude: location.longitude, modelIds: ALL_MODEL_IDS, days: fetchDays },
+      { latitude: location.latitude, longitude: location.longitude, modelIds: ALL_MODEL_IDS, days: FETCH_DAYS },
       { signal: controller.signal },
     )
       .then((fresh) => {
@@ -95,7 +96,7 @@ export default function App() {
         const next = { ...fresh, location }
         setBundle(next)
         setCacheNotice(null)
-        writeCache(next, fetchDays)
+        writeCache(next, FETCH_DAYS)
       })
       .catch((cause: unknown) => {
         if (cancelled) return
@@ -114,7 +115,7 @@ export default function App() {
     }
     // `settings.location` is identified by its coordinates; a rename must not refetch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latitude, longitude, days, fetchDays, attempt])
+  }, [latitude, longitude, attempt])
 
   const selectedModels = useMemo(
     () => (bundle ? bundle.models.filter((entry) => settings.modelIds.includes(entry.model.id)) : []),
@@ -149,7 +150,6 @@ export default function App() {
   const daylight = bundle ? isDaylight(bundle.hourlyTimes[nowIndex] ?? '', firstDaily?.sunrise ?? null, firstDaily?.sunset ?? null) : true
   const heroKey = heroFor(now?.weatherCode ?? null, daylight, now?.temperature ?? null, now?.windSpeed ?? null)
 
-  const windowHours = days * 24
   const total = aggregate.length
   const clampedNow = Math.min(nowIndex, Math.max(0, total - 1))
   const start = range.mode === 'day' ? Math.min((range.day ?? 0) * 24, Math.max(0, total - 1)) : clampedNow
@@ -165,6 +165,7 @@ export default function App() {
     id: entry.model.id,
     name: entry.model.shortName,
     color: entry.model.color,
+    coverageDays: entry.horizonHours / 24,
     values: entry.hourly.slice(start, Math.max(start + 1, end)).map((point) => point[metric === 'temperature' ? 'temperature' : metric === 'wind' ? 'windSpeed' : 'precipitation']),
   }))
 
@@ -363,7 +364,6 @@ export default function App() {
               </div>
               <ModelPicker
                 selectedIds={settings.modelIds}
-                windowHours={windowHours}
                 onChange={(ids) => updateSettings({ modelIds: ids })}
                 availability={availability}
                 horizons={horizons}
@@ -385,7 +385,6 @@ export default function App() {
                 system={settings.system}
                 nowIndex={nowIndex}
                 dayIndex={0}
-                windowHours={windowHours}
                 focusModelId={focusModelId}
                 onFocusModel={setFocusModelId}
               />

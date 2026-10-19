@@ -3,7 +3,6 @@ import type { ModelStatus } from '../lib/types'
 
 interface Props {
   selectedIds: string[]
-  windowHours: number
   onChange: (ids: string[]) => void
   availability: Record<string, ModelStatus>
   horizons: Record<string, number>
@@ -11,7 +10,7 @@ interface Props {
   onFocusModel: (id: string | null) => void
 }
 
-export function ModelPicker({ selectedIds, windowHours, onChange, availability, horizons, focusModelId, onFocusModel }: Props) {
+export function ModelPicker({ selectedIds, onChange, availability, horizons, focusModelId, onFocusModel }: Props) {
   const physics = MODELS.filter((model) => model.kind === 'physics')
   const ai = MODELS.filter((model) => model.kind === 'ai')
 
@@ -53,7 +52,7 @@ export function ModelPicker({ selectedIds, windowHours, onChange, availability, 
               <span className="model-chip__body">
                 <span className="model-chip__name">{model.name}</span>
                 <span className="model-chip__meta">
-                  {unavailable ? 'No data right now' : hours >= windowHours ? 'full window' : hours > 0 ? `covers ${(hours / 24).toFixed(1)} d` : model.provider}
+                  {unavailable ? 'No data right now' : hours > 0 ? `covers ${(hours / 24).toFixed(1)} d` : model.provider}
                 </span>
               </span>
               <span className="model-chip__check" aria-hidden="true">

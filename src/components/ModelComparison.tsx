@@ -9,12 +9,11 @@ interface Props {
   system: UnitSystem
   nowIndex: number
   dayIndex: number
-  windowHours: number
   focusModelId: string | null
   onFocusModel: (id: string | null) => void
 }
 
-export function ModelComparison({ models, system, nowIndex, dayIndex, windowHours, focusModelId, onFocusModel }: Props) {
+export function ModelComparison({ models, system, nowIndex, dayIndex, focusModelId, onFocusModel }: Props) {
   return (
     <div className="comparison">
       <table className="comparison__table">
@@ -26,7 +25,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
             <th scope="col">High</th>
             <th scope="col">Low</th>
             <th scope="col">Rain today</th>
-            <th scope="col">Coverage</th>
+            <th scope="col">Days covered</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +33,6 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
             const now = entry.hourly[nowIndex]
             const day = entry.daily[dayIndex]
             const condition = conditionFor(now?.weatherCode ?? null)
-            const covered = entry.horizonHours >= windowHours
             return (
               <tr
                 key={entry.model.id}
@@ -68,8 +66,8 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
                 <td>{formatTemp(day?.tempMax ?? null, system)}</td>
                 <td>{formatTemp(day?.tempMin ?? null, system)}</td>
                 <td>{formatPrecip(day?.precipitationSum ?? null, system)}</td>
-                <td className={covered ? 'comparison__cover' : 'comparison__cover comparison__cover--short'}>
-                  {entry.status === 'unavailable' ? '—' : covered ? 'Full window' : `${(entry.horizonHours / 24).toFixed(1)} d`}
+                <td className="comparison__cover">
+                  {entry.status === 'unavailable' ? '—' : `${(entry.horizonHours / 24).toFixed(1)} d`}
                 </td>
               </tr>
             )
@@ -77,7 +75,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
         </tbody>
       </table>
       <p className="comparison__hint">
-        Click a row to focus that model in the chart. Coverage says how much of the selected window the model forecasts — “Full window” is complete, a number means it ends earlier. Wind gusts and humidity stay in the current-conditions panel.
+        Click a row to focus that model in the chart. “Days covered” is how far that model forecasts on its own — always measured against the full 16-day request, not the view you selected. Wind gusts and humidity stay in the current-conditions panel.
         {models.some((entry) => entry.status === 'unavailable') ? ' “No data” means the provider returned no values for this run — it is not a zero forecast.' : ''}
       </p>
       <ul className="comparison__extra" aria-label="Wind and humidity by model">

@@ -57,15 +57,18 @@ public/sw.js                     offline shell only — never API data
 - Do **not** assume one long request keeps every model alive; three models returned
   all-null for a 16-day window while working for 7 days. The app asks for the selected
   window and treats nulls honestly.
-- The app fetches **one day more than it displays** (`days + 1`, capped at 16) so that a
-  "7 days" view is 168 hours from now rather than "the rest of today plus six days".
-  The daily strip still shows `days` cards. A 168-hour window that starts mid-afternoon
-  touches eight calendar dates; the axis says so rather than rounding it away.
-- **Horizon selector:** 7 / 10 / 16 days (`DAY_OPTIONS`), default 7. Sixteen is the
-  hard ceiling of the free API and the end of GFS; a 16-day window from 16:00 therefore
-  reaches to the end of the sixteenth local day, not 384 hours from now. The chart
-  labels windows over ten days by weekday only, because sixteen dated labels collide.
-  The deployment base is `/weather/` (Vite `base`); tests boot from the same base.
+- The app **always fetches the 16-day maximum** (`FETCH_DAYS = 16`) and treats the view
+  separately: `settings.days` slices the daily strip and the chart's "all" range only.
+  That is deliberate — coverage is a property of the model, so fetching `days + 1`
+  would make a 15-day model report "8.0 d" merely because seven days were selected.
+  It also makes 7 / 10 / 16 switching instant, with no refetch.
+- A 168-hour window that starts mid-afternoon touches eight calendar dates; the axis
+  says so rather than rounding it away. The chart labels windows over ten days by
+  weekday only (sixteen dated labels collide) and staggers that rail onto two rows.
+- **Coverage** is shown as a plain number of days in three places — the comparison
+  column "Days covered", the model picker, and each chart legend chip. The string
+  "Full window" no longer exists; there is no window-relative wording.
+- The deployment base is `/weather/` (Vite `base`); tests boot from the same base.
 - `timezone=auto` returns local ISO times plus `utc_offset_seconds`; all formatting
   uses those, never `Date`'s local zone.
 

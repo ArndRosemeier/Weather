@@ -55,19 +55,59 @@ test('the version and its What\'s new history are visible', async ({ page }) => 
   await expect(dialog).toBeHidden()
 })
 
-test('a 16-day horizon is selectable and fetches sixteen days', async ({ page }) => {
-  await boot(page)
+test('a 16-day horizon is selectable, fetched once, and coverage is in the legend', async ({ page }) => {
   const request = page.waitForRequest((url) => url.url().includes('forecast_days=16'))
-  await page.getByTestId('horizon-16').click()
+  await boot(page)
   await request
+  await expect(page.getByTestId('day-card')).toHaveCount(7)
 
+  // The legend names each model and how many days it actually covers.
+  await expect(page.locator('[data-testid="legend-model"][data-model-id="meteofrance_arpege_world"]')).toContainText('4.6 d')
+  await expect(page.locator('[data-testid="legend-model"][data-model-id="ecmwf_ifs"]')).toContainText('16.0 d')
+
+  await page.getByTestId('horizon-16').click()
   await expect(page.getByTestId('day-card')).toHaveCount(16)
   await page.getByTestId('range-all').click()
   await expect(page.getByTestId('axis-day')).toHaveCount(16)
   await expect(page.getByTestId('axis-hour')).toHaveCount(0)
+  // Sixteen labels are staggered; no two on the same row may overlap.
+  const boxes = await page.getByTestId('axis-day').evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const rect = node.getBoundingClientRect()
+      return { left: rect.left, right: rect.right, top: Math.round(rect.top) }
+    }),
+  )
+  const rows = new Map<number, typeof boxes>()
+  for (const box of boxes) rows.set(box.top, [...(rows.get(box.top) ?? []), box])
+  for (const row of rows.values()) {
+    for (let index = 1; index < row.length; index += 1) {
+      expect(row[index]?.left ?? 0).toBeGreaterThan((row[index - 1]?.right ?? 0) - 1)
+    }
+  }
+  await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-legend.png' })
 
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({ path: 'artifacts/desktop-16day.png', fullPage: true })
+})
+
+test('changing the horizon changes the view without refetching', async ({ page }) => {
+  let forecastRequests = 0
+  page.on('request', (request) => {
+    if (request.url().includes('/v1/forecast')) forecastRequests += 1
+  })
+  await boot(page)
+  const afterBoot = forecastRequests
+  expect(afterBoot).toBe(1)
+
+  await page.getByTestId('horizon-10').click()
+  await expect(page.getByTestId('day-card')).toHaveCount(10)
+  await page.waitForTimeout(300)
+  expect(forecastRequests).toBe(afterBoot)
+
+  await page.getByTestId('horizon-7').click()
+  await expect(page.getByTestId('day-card')).toHaveCount(7)
+  await page.waitForTimeout(300)
+  expect(forecastRequests).toBe(afterBoot)
 })
 
 test('provider names explain the organisation behind a model', async ({ page }) => {

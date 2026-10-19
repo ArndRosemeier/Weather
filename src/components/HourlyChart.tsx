@@ -11,6 +11,8 @@ export interface ChartModelSeries {
   name: string
   color: string
   values: (number | null)[]
+  /** days this model forecasts on its own (from the 16-day request) */
+  coverageDays: number
 }
 
 interface Props {
@@ -109,16 +111,19 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
   const width = size.width
   const height = size.height
   const wide = width >= 560
-  const pad = { left: wide ? 42 : 34, right: wide ? 16 : 10, top: wide ? 30 : 42, bottom: 26 }
+  const times = points.map((point) => point.time)
+  const segments = daySegments(times)
+  const ticks = hourTicks(times, width)
+  const dayLabels = dayLabelIndices(times)
+  // Long windows (16 day labels) and phones stagger the rail onto two rows;
+  // a single row collides at the partial first/last day.
+  const staggered = !wide || dayLabels.length > 10
+  const pad = { left: wide ? 42 : 34, right: wide ? 16 : 10, top: staggered ? 42 : 30, bottom: 26 }
   const plotWidth = Math.max(10, width - pad.left - pad.right)
   const plotHeight = Math.max(10, height - pad.top - pad.bottom)
   const x = (index: number) => pad.left + (points.length <= 1 ? 0 : (index * plotWidth) / (points.length - 1))
   const y = (value: number) => pad.top + ((domainMax - value) / (domainMax - domainMin || 1)) * plotHeight
 
-  const times = points.map((point) => point.time)
-  const segments = daySegments(times)
-  const ticks = hourTicks(times, width)
-  const dayLabels = dayLabelIndices(times)
 
   const unit = metric === 'temperature' ? tempUnit(system) : metric === 'wind' ? windUnit(system) : precipUnit(system)
   const tickDigits = metric === 'precipitation' ? 1 : 0
@@ -226,7 +231,7 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
               const half = wide ? 40 : 12
               const cx = Math.min(Math.max(x(entry.index), pad.left + half), width - pad.right - half)
               // On a phone eight day names do not fit one row: alternate rows.
-              const labelY = wide ? 12 : labelIndex % 2 === 0 ? 10 : 25
+              const labelY = staggered ? (labelIndex % 2 === 0 ? 10 : 25) : 12
               return (
               <text
                 key={`day-label-${entry.date}`}
@@ -309,7 +314,8 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
               aria-pressed={focusModelId === model.id}
             >
               <span className="chart__swatch" style={{ background: model.color }} />
-              {model.name}
+              <span>{model.name}</span>
+              <span className="chart__legend-days">{model.coverageDays.toFixed(1)} d</span>
             </button>
           </li>
         ))}

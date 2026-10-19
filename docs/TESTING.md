@@ -21,7 +21,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Unit | `tests/unit/wmo.test.ts` | code → label/icon, day/night hero, temperature extremes, unknown-code honesty (`HeroKey` is a compile-time union; no test pins the 14 keys to the 42 files — see *Image artefacts*) |
 | Unit | `tests/unit/cache.test.ts` | TTL, corrupt entries, storage that throws |
 | Unit | `tests/unit/hero-assets.test.ts` | all 14 hero families × 3 widths exist as real WebP; icons and manifest entries resolve |
-| E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API); includes day borders at 48 h and 7 days, a phone no-overlap check on the day rail, provider tooltips on hover/keyboard/Escape, a 16-day horizon that proves `forecast_days=16` is requested, and the version badge / What's-new history |
+| E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API); includes day borders at 48 h and 7 days, a phone no-overlap check on the day rail, provider tooltips on hover/keyboard/Escape, a 16-day view that proves `forecast_days=16` is requested, a request-count assertion that switching 7/10/16 does not refetch, legend coverage, and the version badge / What's-new history |
 | Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; waits for the mounted hero bitmap, records `artifacts/live-smoke.json` |
 
 ## Fixtures
