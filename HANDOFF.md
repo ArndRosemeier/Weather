@@ -1,15 +1,17 @@
 # Handoff
 
-**State (2026-10-19T16:49Z):** DONE, verified and pushed. Latest full gate on
-`5e5d8f2`: **exit 0**, 45/45 unit (11 files), 16 E2E passed / 1 skipped, 34 s.
-That landing is **version 1.01**: the chart legend says how many days each model
-covers, the app always fetches 16 days, and changing 7/10/16 no longer refetches. Earlier landings: 7/10/16-day horizon, `/weather/` deploy
+**State (2026-10-19T17:03Z):** DONE, verified and pushed. Latest full gate on
+`d8a5ce2`: **exit 0**, 45/45 unit (11 files), 17 E2E passed / 1 skipped, 36 s.
+That landing is **version 1.02**: on phones the What's new button is hidden and
+the title/logo opens the dialog. The first gate on this change was **red** —
+axe caught a label-content-name-mismatch on the brand button; fixed forward in
+`d8a5ce2`, and both runs are in the journal. Earlier landings: 7/10/16-day horizon, `/weather/` deploy
 reconciliation, MIT license, day-bounded chart, provider tooltips.
 
 **Version rule (owner):** the visible version rises by **0.01 on every push**.
 Before the next push: `pnpm release --title "…" --note "…"` (writes
 `src/data/version.json` and `package.json`), then commit, gate, push. Next
-version is 1.02. Full gate on
+version is 1.03. Full gate on
 `db014a0` — **exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped, 25 s,
 lock acquired. Repository public at `https://github.com/ArndRosemeier/Weather`; live at
 `https://apps.futuremagic.de/weather/` (the deployed build lags HEAD until a

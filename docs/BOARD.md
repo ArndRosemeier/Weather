@@ -41,7 +41,11 @@ LANDED | row=20 | sha=9708148 | verify=MY OWN: What's-new dialog screenshot insp
 GATE | tier=full | sha=5e5d8f2 | exit=0 | unit=45/45 (11 files) | e2e=16 passed, 1 skipped (opt-in live) | duration=34s | lock=acquired | log=.gate-logs/gate-5e5d8f2.log
 
 LANDED | row=21 | sha=5e5d8f2 | verify=MY OWN: legend screenshot inspected (IFS 16.0 d … ARPEGE 4.6 d), 45/45 unit, 16 E2E incl. request-count proof and rail-overlap check | coverage in days in the legend; 16-day fetch decoupled from the view; version 1.01 | docs=ledger row 21
-NEXT-PUSH | version 1.02 required before the next push: `pnpm release --title … --note …`
+GATE | tier=full | sha=4899bc8 | exit=1 | RED: axe label-content-name-mismatch on the new brand button (aria-label omitted the visible version). Fixed forward, not re-run to a different answer.
+GATE | tier=full | sha=d8a5ce2 | exit=0 | unit=45/45 (11 files) | e2e=17 passed, 1 skipped (opt-in live) | duration=36s | lock=acquired | log=.gate-logs/gate-phone-title2.log
+
+LANDED | row=22 | sha=d8a5ce2 | verify=MY OWN: mobile screenshot inspected (no button, brand opens the dialog), 45/45 unit, 17 E2E incl. a11y | phone title triggers What's new; version 1.02 | docs=ledger row 22
+NEXT-PUSH | version 1.03 required before the next push: `pnpm release --title … --note …`
 NOTE | exit 2 is not "the gate passed": behaviour evidence for this tree is the full run on 909d490; the code tree is identical, only prose changed.
 
 PUSH | origin=https://github.com/ArndRosemeier/Weather (public, default=main) | initial push db014a0 verified MATCH (git ls-remote == local HEAD) | rule: every record commit is pushed only after its own full gate; current sha = `git ls-remote origin refs/heads/main` | owner instruction 2026-10-19: "Please push to here" — supersedes ledger row 7 for this repo only | no deploy, no force-push
