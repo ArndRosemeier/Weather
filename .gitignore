@@ -1,0 +1,11 @@
+.gate-logs/
+.gate-lock/
+worktrees/
+.cos/journal.jsonl
+.cos/worktrees
+.cos/root-session
+.cos/.stop-guard
+assets/raw-heroes/
+artifacts/
+test-results/
+playwright-report/
