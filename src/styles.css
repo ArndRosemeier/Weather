@@ -261,7 +261,10 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 .stat__value { display: block; margin: 3px 0 2px; font-size: 27px; font-weight: 560; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .stat__sub { display: block; font-size: 12px; color: var(--muted-2); }
 
+.main > * { min-width: 0; }
+
 .panel {
+  min-width: 0;
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -301,7 +304,7 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 .chart__tooltip-time { font-size: 10.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
 .chart__tooltip-row { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; }
 .chart__tooltip-row--avg { padding-bottom: 6px; margin-bottom: 5px; border-bottom: 1px solid var(--line); }
-.chart__tooltip-list { list-style: none; margin: 0; padding: 0; max-height: 190px; overflow: auto; }
+.chart__tooltip-list { list-style: none; margin: 0; padding: 0; }
 .chart__tooltip-list li { display: grid; grid-template-columns: 8px 1fr auto; align-items: center; gap: 6px; padding: 1.5px 0; font-size: 11.5px; color: var(--muted); }
 .chart__tooltip-list li.is-focused { color: var(--text); }
 .chart__tooltip-value { font-variant-numeric: tabular-nums; color: var(--text); }
@@ -399,8 +402,8 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 
 /* ---------- comparison ---------- */
 
-.comparison { overflow-x: auto; }
-.comparison__table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.comparison { overflow-x: auto; min-width: 0; -webkit-overflow-scrolling: touch; }
+.comparison__table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 13px; }
 .comparison__table thead th {
   padding: 0 8px 8px;
   border-bottom: 1px solid var(--line);

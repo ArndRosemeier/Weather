@@ -29,6 +29,7 @@ test('hovering and keyboarding the chart exposes per-model values', async ({ pag
   await expect(tooltip).toBeVisible()
   await expect(tooltip).toContainText('Average')
   await expect(tooltip.locator('li')).toHaveCount(11)
+  await page.screenshot({ path: 'artifacts/desktop-chart-tooltip.png' })
 
   await page.mouse.move(10, 10)
   await plot.focus()

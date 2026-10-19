@@ -13,13 +13,14 @@ branch, worktree, session id, path.
 ```
 reconciled: main @ 63ce9a2 · 2026-10-19T14:31Z
 
-SESSION | id=session-1afeb651 | model=deepseek-flash | state=dispatching
+SESSION | id=session-1afeb651 | model=deepseek-flash | state=verifying
 
-IN-FLIGHT | row=5 | session=heroes-writer | worktree=/home/administrator/projects/Weather/worktrees/heroes | branch=slice/heroes | base=63ce9a2 | state=dispatched | scope=14 hero families + app icons, WebP 320/800/1600, docs row 5
-QUEUE | row=10 | UI shell: hero, model picker, hourly chart, daily strip, comparison | src=this file
-QUEUE | row=11 | Playwright E2E at 390/1440 + fixtures + offline | src=docs/TESTING.md
-QUEUE | row=12 | PWA polish, a11y, screenshots for dispatcher review | src=docs/ARCHITECTURE.md
-QUEUE | row=13 | HANDOFF + final gate + report | src=this file
+LANDED | row=5 | sha=66cbfb6 (merge e8a620f) | verify=MY OWN: 42 WebP + icons read with image inspection, 30/30 unit incl. hero-asset contract | worktree /home/administrator/projects/Weather/worktrees/heroes removed, session retired | docs=ledger row 5 + appendix, architecture, testing
+LANDED | row=10 | sha=3cefa9f | verify=MY OWN: build 0, unit 30/30, 11 E2E passed/1 skipped | docs=ledger row 10
+LANDED | row=11 | sha=<pending final> | verify=MY OWN: mobile layout viewport pinned; tooltip clip fixed | docs=ledger row 11
+
+retired_branch=slice/heroes
+QUEUE | row=12 | full gate on final commit + record the numbers | src=docs/GATE.md
 
 RECOVERY | repo=/home/administrator/projects/Weather | remote=none (owner rule) | branch=main | gate=bash scripts/gate.sh
 ```

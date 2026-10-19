@@ -87,13 +87,26 @@ post-processing problem.
   small widths. 1600 is the desktop/retina source, 800 the phone default, 320 the
   thumbnail. Measured set: 42 files, 2,044,774 B total (the 1600 files alone 1.44 MB).
 - **Icons.** Rendered from `public/icon.svg` in the same run — 192 and 512 for the
-  manifest (`any` and `maskable`), 180 for `apple-touch-icon.png`. The SVG is the only
-  icon source; no PNG is hand-drawn.
+  manifest (`any`), 180 for `apple-touch-icon.png` (wired in `index.html`), and a
+  separate full-bleed `public/icon-maskable.svg` → `icon-512-maskable.png` for the
+  Android mask, so the rounded brand tile is never cropped by the mask. The SVG is the
+  only icon source; no PNG is hand-drawn.
 - **The key set is the contract** with `HeroKey` in `src/lib/wmo.ts`: adding a family
   means a prompt entry *and* a `HeroKey`, and `heroFor` must be able to return it.
-  Today `wind` is generated but unreachable — no WMO code maps to it — so a wind-speed
-  rule is still owed. Nothing in the unit suite pins the 14 keys to the 42 files yet;
-  the artefact and visual checks in `TESTING.md` are the guard.
+  `wind` is reachable through a wind-speed rule (≥ 55 km/h and no precipitation);
+  `tests/unit/hero-assets.test.ts` pins all 14 keys to their 42 files and the icon
+  set, so a missing or renamed asset fails the unit suite instead of degrading the
+  hero silently.
+
+## Responsive layout rule
+
+`.main > *` and `.panel` carry `min-width: 0`, and the model-by-model table lives
+inside `.comparison` (`overflow-x: auto`) with `min-width: 620px`. Without that,
+the table's min-content width widens its grid parent, and a mobile browser expands
+its **layout viewport** to fit — everything stays technically in bounds
+(`scrollWidth === innerWidth`) while the whole app shrinks and clips. The mobile E2E
+pins `window.innerWidth <= 430` for exactly this reason. The chart, like the table,
+must never set the page's min-content width.
 
 ## PWA
 

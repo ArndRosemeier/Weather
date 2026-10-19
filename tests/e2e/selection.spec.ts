@@ -33,6 +33,11 @@ test('at least one model always stays selected', async ({ page }) => {
   await expect(page.getByTestId('legend-model')).toHaveCount(1)
 
   const remaining = page.locator('[data-testid="model-chip"][aria-checked="true"]')
-  await remaining.click()
+  // The last selected chip advertises aria-disabled, which Playwright's
+  // actionability (correctly) refuses to click. Dispatch the event to prove the
+  // handler itself also refuses to empty the selection.
+  await expect(remaining).toHaveAttribute('aria-disabled', 'true')
+  await remaining.dispatchEvent('click')
+  await expect(remaining).toHaveAttribute('aria-checked', 'true')
   await expect(page.getByTestId('legend-model')).toHaveCount(1)
 })

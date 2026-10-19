@@ -17,11 +17,14 @@ function header(file: string, bytes: number): Buffer {
 describe('generated hero assets', () => {
   it('ships every hero family at three widths as real WebP', () => {
     for (const key of HERO_KEYS) {
+      // Size floors are a degenerate-output alarm, not a quality bar: a smooth
+      // sky at 320 px legitimately compresses to ~4 KB.
+      const floors: Record<number, number> = { 320: 2_000, 800: 6_000, 1600: 20_000 }
       for (const width of [320, 800, 1600]) {
         const file = path.join(PUBLIC, 'heroes', `${key}-${width}.webp`)
         expect(fs.existsSync(file), `${file} is missing — run pnpm heroes`).toBe(true)
         const buffer = fs.readFileSync(file)
-        expect(buffer.length, `${file} is suspiciously small`).toBeGreaterThan(12_000)
+        expect(buffer.length, `${file} is suspiciously small`).toBeGreaterThan(floors[width] ?? 0)
         expect(buffer.subarray(0, 4).toString('ascii')).toBe('RIFF')
         expect(buffer.subarray(8, 12).toString('ascii')).toBe('WEBP')
       }

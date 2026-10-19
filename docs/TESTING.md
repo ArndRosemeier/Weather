@@ -5,7 +5,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Tier | Command | Question | Exit |
 | --- | --- | --- | --- |
 | Cheap | `GATE_TESTS=0 bash scripts/gate.sh` → `pnpm run build` | does it typecheck and build? | `0`/`1`/`2` |
-| Full | `bash scripts/gate.sh` → `pnpm run test:unit` + `pnpm run test:e2e` | did behaviour move? | `0`/`1`/`9` |
+| Full | `bash scripts/gate.sh` → `pnpm run verify` (build + unit + e2e) | did behaviour move? | `0`/`1`/`9` |
 
 `0` green · `1` red (read the raw log) · `2` cheap passed, suite did not run ·
 `9` lock refused (VOID). Never pipe a gate through `tail`/`head`.
@@ -20,6 +20,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Unit | `tests/unit/units.test.ts` | conversions and "—" for missing values |
 | Unit | `tests/unit/wmo.test.ts` | code → label/icon, day/night hero, temperature extremes, unknown-code honesty (`HeroKey` is a compile-time union; no test pins the 14 keys to the 42 files — see *Image artefacts*) |
 | Unit | `tests/unit/cache.test.ts` | TTL, corrupt entries, storage that throws |
+| Unit | `tests/unit/hero-assets.test.ts` | all 14 hero families × 3 widths exist as real WebP; icons and manifest entries resolve |
 | E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API) |
 | Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; run manually, record the numbers |
 
@@ -36,20 +37,22 @@ service except the opt-in live spec.
 
 ## Image artefacts (heroes + icons)
 
-There is no automated image test yet — no UI, so no screenshot layer. The art check is a
-deterministic command plus a human judgement, and both are part of landing an art change:
+`tests/unit/hero-assets.test.ts` pins the file contract (14 keys × 3 widths, real WebP
+magic, icons referenced by the manifest, apple-touch link in the HTML). What it cannot
+judge is the picture, so the art check is a command plus human judgement:
 
-- **Count and geometry** (one-off `node -e` with sharp metadata): `public/heroes/*.webp`
-  = 42 (14 `HeroKey`s × 1600/800/320); every `-1600` is 1600×1067, `-800` 800×533, `-320`
-  320×213 — the 3:2 centre crop, never letterboxed.
+- **Count and geometry** (`tests/unit/hero-assets.test.ts`, plus a one-off sharp
+  metadata read): `public/heroes/*.webp` = 42 (14 `HeroKey`s × 1600/800/320); every
+  `-1600` is 1600×1067, `-800` 800×533, `-320` 320×213 — the 3:2 centre crop, never
+  letterboxed.
 - **Icons** (sharp metadata): `public/icon-192.png` 192×192, `public/icon-512.png`
   512×512, `public/apple-touch-icon.png` 180×180.
-- **Bytes:** every `-1600` should land in 60–500 KB. Measured 2026-10-19: 12/14 in range;
-  `clear-day` 41 KB and `overcast` 39 KB are deliberately smooth, low-frequency skies.
+- **Bytes:** the unit test applies per-width floors (320 > 2 KB, 800 > 6 KB, 1600 >
+  20 KB) purely as a degenerate-output alarm. The original 60 KB floor for a 1600 px
+  file was wrong and cost a red unit run: `clear-day` 41 KB and `overcast` 39 KB are
+  deliberately smooth, low-frequency skies, and a 320 px sky is legitimately ~4 KB.
   A q88 re-encode was measured at +60% bytes with no visible or measurable gain (170 vs
-  173 distinct levels in a 3× crop), so the bound is a *degenerate-output alarm*, not a
-  quality target: flag a file only when it is under the floor **and** inspection shows
-  blur, banding or a flat fill.
+  173 distinct levels in a 3× crop), so encoding stays q80.
 - **Look:** open every 1600 px file and judge it against the art-direction bar — no text,
   letters, watermarks or logos; no people; the subject matches its `HeroKey`;
   photographic rather than illustrated; a calm lower third; no two keys near-duplicates.
@@ -61,12 +64,18 @@ deterministic command plus a human judgement, and both are part of landing an ar
   21.7 purely from falling flakes over a clean slope, while the two urban scenes
   (drizzle 15.3, rain 14.9) are the ones that need the UI's text scrim.
 
-The images are not type-checked and no test reads them: the cheap gate passing says
-nothing about the hero set, so this section is the check.
+The unit test proves presence and encoding, not quality: the cheap gate passing says
+nothing about how a hero looks, so opening the frames at 1600 px is still the check.
 
 ## Evidence rules
 
 - Keep raw gate logs in `.gate-logs/` (gitignored).
 - E2E writes screenshots for the dispatcher's own review to `artifacts/` — inspect
   them; a passing assertion is not a visual check.
-- A screenshot with a layout defect outranks a green assertion.
+- A screenshot with a layout defect outranks a green assertion. A measured case: at
+  390 px the app laid out at 1140 px and scaled down while `scrollWidth - innerWidth`
+  was 0; the mobile spec now pins `window.innerWidth <= 430` and a chart/table
+  screenshot is reviewed on every UI landing.
+- `artifacts/mobile-hero-390.png`, `mobile-chart-390.png`, `desktop-1440.png` and
+  `desktop-chart-tooltip.png` are the dispatcher's review set; they are gitignored,
+  regenerated by every E2E run.
