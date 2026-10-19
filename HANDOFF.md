@@ -1,9 +1,11 @@
 # Handoff
 
-**State (2026-10-19T15:57Z):** DONE, verified and pushed. Latest full gate on
-`7ce191e`: **exit 0**, 35/35 unit (8 files), 12 E2E passed / 1 skipped, 27 s.
-That landing adds the MIT license and fixes the chart's week/day axis (day
-borders, day-name rail, true 168-hour window). Full gate on
+**State (2026-10-19T16:01Z):** DONE, verified and pushed. Latest full gate on
+`c9045c2`: **exit 0**, 39/39 unit (9 files), 13 E2E passed / 1 skipped, 29 s.
+That landing adds provider tooltips (organisation, headquarters, models, official
+site) and fixes the Coverage column so it reports the window covered rather than
+the fetch cap. Earlier landings: MIT license, day-bounded chart with a true
+168-hour week. Full gate on
 `db014a0` — **exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped, 25 s,
 lock acquired. Repository public at `https://github.com/ArndRosemeier/Weather`. Every commit that
 reaches `main` is pushed only after its own full gate; `git ls-remote origin

@@ -26,6 +26,9 @@ GATE | tier=full | sha=7ce191e | exit=0 | unit=35/35 (8 files) | e2e=12 passed, 
 
 LANDED | row=15 | sha=7ce191e | verify=MY OWN: LICENSE + package.json + README; full gate above | MIT license per owner instruction | docs=ledger row 15
 LANDED | row=16 | sha=7ce191e | verify=MY OWN: 7-day and 48h chart screenshots inspected (desktop + 390px), unit 35/35, E2E 12/12 | day borders + day rail; true 168h window; zero-step loop caught pre-ship | docs=ledger row 16
+GATE | tier=full | sha=c9045c2 | exit=0 | unit=39/39 (9 files) | e2e=13 passed, 1 skipped (opt-in live) | duration=29s | lock=acquired | log=.gate-logs/gate-c9045c2.log
+
+LANDED | row=17 | sha=c9045c2 | verify=MY OWN: tooltip screenshot inspected (hover card over the table), 39/39 unit, 13 E2E incl. hover/focus/Escape | provider tooltips + Coverage wording fix | docs=ledger row 17
 NOTE | exit 2 is not "the gate passed": behaviour evidence for this tree is the full run on 909d490; the code tree is identical, only prose changed.
 
 PUSH | origin=https://github.com/ArndRosemeier/Weather (public, default=main) | initial push db014a0 verified MATCH (git ls-remote == local HEAD) | rule: every record commit is pushed only after its own full gate; current sha = `git ls-remote origin refs/heads/main` | owner instruction 2026-10-19: "Please push to here" — supersedes ledger row 7 for this repo only | no deploy, no force-push
