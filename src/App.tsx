@@ -62,12 +62,15 @@ export default function App() {
 
   const { latitude, longitude } = settings.location
   const days = settings.days
+  // Fetch one day beyond the displayed window so "7 days" really is 168 hours
+  // from now, not "the rest of today plus six days". The strip still shows `days`.
+  const fetchDays = Math.min(days + 1, 16)
 
   useEffect(() => {
     const controller = new AbortController()
     let cancelled = false
     const location = settings.location
-    const cached = readCache(location.latitude, location.longitude, days)
+    const cached = readCache(location.latitude, location.longitude, fetchDays)
 
     if (cached) {
       setBundle({ ...cached.bundle, location })
@@ -81,7 +84,7 @@ export default function App() {
     setError(null)
 
     fetchForecast(
-      { latitude: location.latitude, longitude: location.longitude, modelIds: ALL_MODEL_IDS, days },
+      { latitude: location.latitude, longitude: location.longitude, modelIds: ALL_MODEL_IDS, days: fetchDays },
       { signal: controller.signal },
     )
       .then((fresh) => {
@@ -89,7 +92,7 @@ export default function App() {
         const next = { ...fresh, location }
         setBundle(next)
         setCacheNotice(null)
-        writeCache(next, days)
+        writeCache(next, fetchDays)
       })
       .catch((cause: unknown) => {
         if (cancelled) return
@@ -108,7 +111,7 @@ export default function App() {
     }
     // `settings.location` is identified by its coordinates; a rename must not refetch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latitude, longitude, days, attempt])
+  }, [latitude, longitude, days, fetchDays, attempt])
 
   const selectedModels = useMemo(
     () => (bundle ? bundle.models.filter((entry) => settings.modelIds.includes(entry.model.id)) : []),
@@ -134,8 +137,8 @@ export default function App() {
     [bundle, availableModels],
   )
   const daily = useMemo(
-    () => (bundle && availableModels.length > 0 ? aggregateDaily(availableModels, bundle.dailyDates.length) : []),
-    [bundle, availableModels],
+    () => (bundle && availableModels.length > 0 ? aggregateDaily(availableModels, Math.min(bundle.dailyDates.length, days)) : []),
+    [bundle, availableModels, days],
   )
   const now = aggregate[nowIndex]
 
@@ -152,7 +155,7 @@ export default function App() {
       ? Math.min(total, start + 24)
       : range.mode === '48h'
         ? Math.min(total, start + 48)
-        : total
+        : Math.min(total, start + days * 24)
   const points = aggregate.slice(start, Math.max(start + 1, end))
 
   const chartModels = availableModels.map((entry) => ({

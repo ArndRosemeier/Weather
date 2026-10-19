@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AggregatePoint, UnitSystem } from '../lib/types'
-import { dayLabel, hourLabel } from '../lib/format'
+import { dateLabel, dayLabel, hourLabel } from '../lib/format'
+import { dayLabelIndices, daySegments, hourTicks } from '../lib/timeAxis'
 import { convertPrecip, convertTemp, convertWind, precipUnit, tempUnit, windUnit } from '../lib/units'
 
 export type ChartMetric = 'temperature' | 'precipitation' | 'wind'
@@ -108,14 +109,16 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
   const width = size.width
   const height = size.height
   const wide = width >= 560
-  const pad = { left: wide ? 42 : 34, right: wide ? 16 : 10, top: 18, bottom: 26 }
+  const pad = { left: wide ? 42 : 34, right: wide ? 16 : 10, top: wide ? 30 : 42, bottom: 26 }
   const plotWidth = Math.max(10, width - pad.left - pad.right)
   const plotHeight = Math.max(10, height - pad.top - pad.bottom)
   const x = (index: number) => pad.left + (points.length <= 1 ? 0 : (index * plotWidth) / (points.length - 1))
   const y = (value: number) => pad.top + ((domainMax - value) / (domainMax - domainMin || 1)) * plotHeight
 
-  const labelStep = Math.max(1, Math.ceil(points.length / (wide ? 6 : 4)))
-  const xLabels = points.map((point, index) => ({ point, index })).filter(({ index }) => index % labelStep === 0 || index === points.length - 1)
+  const times = points.map((point) => point.time)
+  const segments = daySegments(times)
+  const ticks = hourTicks(times, width)
+  const dayLabels = dayLabelIndices(times)
 
   const unit = metric === 'temperature' ? tempUnit(system) : metric === 'wind' ? windUnit(system) : precipUnit(system)
   const tickDigits = metric === 'precipitation' ? 1 : 0
@@ -203,9 +206,51 @@ export function HourlyChart({ points, models, metric, system, focusModelId, onFo
 
             <path d={buildLinePath(averageValues, x, y)} fill="none" stroke="#ffffff" strokeWidth={2.6} strokeLinecap="round" />
 
-            {xLabels.map(({ point, index }) => (
-              <text key={`x-${index}`} x={x(index)} y={height - 6} textAnchor={index === 0 ? 'start' : index === points.length - 1 ? 'end' : 'middle'} className="chart__axis">
-                {index === 0 || hourLabel(point.time) === '00:00' ? `${dayLabel(point.time)} ${hourLabel(point.time)}` : hourLabel(point.time)}
+            {segments.map((entry, index) =>
+              index === 0 ? null : (
+                <line
+                  key={`day-${entry.date}`}
+                  x1={x(entry.start)}
+                  x2={x(entry.start)}
+                  y1={pad.top}
+                  y2={height - pad.bottom}
+                  className="chart__dayline"
+                  data-testid="day-separator"
+                />
+              ),
+            )}
+
+            {dayLabels.map((entry, labelIndex) => {
+              // Keep the centred label inside the plot even when a partial day's
+              // midpoint sits close to an edge (8 labels on a 390 px phone).
+              const half = wide ? 40 : 12
+              const cx = Math.min(Math.max(x(entry.index), pad.left + half), width - pad.right - half)
+              // On a phone eight day names do not fit one row: alternate rows.
+              const labelY = wide ? 12 : labelIndex % 2 === 0 ? 10 : 25
+              return (
+              <text
+                key={`day-label-${entry.date}`}
+                x={cx}
+                y={labelY}
+                textAnchor="middle"
+                className="chart__axis chart__axis--day"
+                data-testid="axis-day"
+              >
+                {wide ? `${entry.label} ${dateLabel(entry.date)}` : entry.label}
+              </text>
+              )
+            })}
+
+            {ticks.map((tick) => (
+              <text
+                key={`tick-${tick.index}`}
+                x={x(tick.index)}
+                y={height - 6}
+                textAnchor={tick.index === 0 ? 'start' : tick.index === points.length - 1 ? 'end' : 'middle'}
+                className="chart__axis"
+                data-testid="axis-hour"
+              >
+                {tick.label}
               </text>
             ))}
 

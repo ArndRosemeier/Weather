@@ -12,6 +12,7 @@ src/App.tsx                      state owner: location, models, units, window, e
 src/lib/api.ts                   URL builder + response validation/parsing (THE boundary)
 src/lib/models.ts                catalogue, base-model dedupe, exclusions (THE seam)
 src/lib/average.ts               null-aware aggregate + spread + consensus code
+src/lib/timeAxis.ts              day segments + axis ticks (chart borders/labels)
 src/lib/wmo.ts                   WMO code → label/icon/hero, daylight rule
 src/lib/units.ts                 the only place a unit conversion happens
 src/lib/cache.ts                 localStorage cache, TTL, stale fallback
@@ -31,6 +32,7 @@ public/sw.js                     offline shell only — never API data
 | Compute the average | `aggregateHourly` / `aggregateDaily` | Mean over non-null contributors only; never substitutes 0. |
 | Convert a unit | `src/lib/units.ts` | No inline `* 9/5` anywhere else. |
 | Map a weather code | `conditionFor` / `heroFor` | Unknown code is labelled "Unknown conditions". |
+| Place chart day borders and labels | `daySegments` / `dayLabelIndices` / `hourTicks` | Day names sit on a centred rail; day borders are verticals at local midnight; hour ticks exist only for windows ≤ 48 h. |
 | Cache a forecast | `src/lib/cache.ts` | TTL 20 min; stale data is shown with a notice, never silently refreshed. |
 | Render an error | `src/components/ErrorBanner.tsx` | Fed by `App`'s single `error` state. |
 | Generate hero art | `scripts/generate-heroes.mjs` | Prompts live in the script; output is WebP at 1600/800/320 (1600×1067, 3:2). Never hand-edit `public/heroes/` — regenerate. |
@@ -51,6 +53,10 @@ public/sw.js                     offline shell only — never API data
 - Do **not** assume one long request keeps every model alive; three models returned
   all-null for a 16-day window while working for 7 days. The app asks for the selected
   window and treats nulls honestly.
+- The app fetches **one day more than it displays** (`days + 1`, capped at 16) so that a
+  "7 days" view is 168 hours from now rather than "the rest of today plus six days".
+  The daily strip still shows `days` cards. A 168-hour window that starts mid-afternoon
+  touches eight calendar dates; the axis says so rather than rounding it away.
 - `timezone=auto` returns local ISO times plus `utc_offset_seconds`; all formatting
   uses those, never `Date`'s local zone.
 

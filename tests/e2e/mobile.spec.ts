@@ -20,6 +20,26 @@ test('phone layout at 390px has no horizontal overflow', async ({ page }) => {
   await page.getByTestId('chart-plot').scrollIntoViewIfNeeded()
   await page.screenshot({ path: 'artifacts/mobile-chart-390.png' })
 
+  // A week on a 390 px screen: day labels must not collide.
+  await page.getByRole('button', { name: '7 days', exact: true }).click()
+  await expect(page.getByTestId('axis-day')).toHaveCount(8)
+  await expect(page.getByTestId('axis-hour')).toHaveCount(0)
+  // Labels are staggered across two rows on a phone; compare only same-row pairs.
+  const boxes = await page.getByTestId('axis-day').evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const rect = node.getBoundingClientRect()
+      return { left: rect.left, right: rect.right, top: Math.round(rect.top) }
+    }),
+  )
+  const rows = new Map<number, typeof boxes>()
+  for (const box of boxes) rows.set(box.top, [...(rows.get(box.top) ?? []), box])
+  for (const row of rows.values()) {
+    for (let index = 1; index < row.length; index += 1) {
+      expect(row[index]?.left ?? 0).toBeGreaterThan((row[index - 1]?.right ?? 0) - 1)
+    }
+  }
+  await page.locator('#hourly').screenshot({ path: 'artifacts/mobile-7day.png' })
+
   // The model picker is reachable and usable on a phone.
   await page.getByTestId('model-chip').first().scrollIntoViewIfNeeded()
   await expect(page.getByTestId('model-chip').first()).toBeVisible()

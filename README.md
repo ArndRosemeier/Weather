@@ -30,6 +30,12 @@ keeps exactly **one entry per base model** and documents every exclusion:
 | CMA GRAPES | CMA | physics | 5.5 d |
 | BOM ACCESS-G | BOM | physics | 10 d |
 
+Measured horizons (2026-10-19): only **ECMWF IFS (15 d)** and **NOAA GFS (16 d)**
+reliably forecast more than a week; JMA reaches 11.3 d, GEM 10 d, ICON 7.5 d and UKMO
+7 d, while ARPEGE (4.5 d) and CMA (5.4 d) end inside it. AIFS, GraphCast and BOM are
+10–15 d models but were returning no data at capture time, which is exactly why the app
+shows availability instead of assuming it.
+
 Excluded on purpose: lower-resolution copies of IFS, "seamless" blends that only add
 regional domains (HRRR, ICON-EU/D2, AROME, MSM, HRDPS, UK 2 km), regional-only
 models (MET Norway, KNMI, DMI), and ensemble members of ACCESS-G. The full list with
@@ -81,8 +87,7 @@ Screenshots are written to `artifacts/` for visual review.
 Forecast data by [Open-Meteo](https://open-meteo.com/) under
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), via their free
 non-commercial API (10,000 calls/day, 5,000/hour, 600/minute per IP). Model data
-belongs to the providers listed above. The app itself has **no license file yet** —
-choose one before publishing. Hero art was generated with Meta Muse through
+belongs to the providers listed above. The app itself is **MIT licensed** — see [`LICENSE`](LICENSE). Hero art was generated with Meta Muse through
 OpenRouter; prompts live in `scripts/generate-heroes.mjs`.
 
 ![Weather Compare on a phone](docs/media/mobile.webp)

@@ -20,6 +20,25 @@ test('desktop shows the full comparison at 1440px', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('day boundaries are marked on 48-hour and 7-day views', async ({ page }) => {
+  await boot(page)
+  await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-48h.png' })
+
+  // Default 48 h window from 16:00 local: two midnights inside the plot.
+  await expect(page.getByTestId('axis-day')).toHaveCount(3)
+  await expect(page.getByTestId('day-separator')).toHaveCount(2)
+  await expect(page.getByTestId('axis-hour').first()).toBeVisible()
+
+  await page.getByRole('button', { name: '7 days', exact: true }).click()
+  // 168 hours from 16:00 touches eight calendar days; seven midnights are borders.
+  await expect(page.getByTestId('axis-day')).toHaveCount(8)
+  await expect(page.getByTestId('day-separator')).toHaveCount(7)
+  // A week is labelled in days: no hour ticks at all.
+  await expect(page.getByTestId('axis-hour')).toHaveCount(0)
+
+  await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-7day.png' })
+})
+
 test('hovering and keyboarding the chart exposes per-model values', async ({ page }) => {
   await boot(page)
   const plot = page.getByTestId('chart-plot')
