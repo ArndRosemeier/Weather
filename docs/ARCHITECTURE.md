@@ -13,6 +13,7 @@ src/lib/api.ts                   URL builder + response validation/parsing (THE 
 src/lib/models.ts                catalogue, base-model dedupe, exclusions (THE seam)
 src/lib/average.ts               null-aware aggregate + spread + consensus code
 src/lib/providers.ts             provider metadata (organisation, HQ, description, URL)
+src/lib/version.ts               visible version + What's-new history (reads src/data/version.json)
 src/lib/timeAxis.ts              day segments + axis ticks (chart borders/labels)
 src/lib/wmo.ts                   WMO code → label/icon/hero, daylight rule
 src/lib/units.ts                 the only place a unit conversion happens
@@ -35,6 +36,7 @@ public/sw.js                     offline shell only — never API data
 | Map a weather code | `conditionFor` / `heroFor` | Unknown code is labelled "Unknown conditions". |
 | Place chart day borders and labels | `daySegments` / `dayLabelIndices` / `hourTicks` | Day names sit on a centred rail; day borders are verticals at local midnight; hour ticks exist only for windows ≤ 48 h. |
 | Explain a provider | `src/lib/providers.ts` + `ProviderTooltip` | One entry per organisation, keyed by `ModelInfo.providerId`; the tooltip opens on hover and focus in a portal (the table's scroller would clip it) and must never be the only place a fact exists. |
+| Bump the version | `scripts/release.mjs` | The ONLY writer of `src/data/version.json`; +0.01 per push, syncs `package.json` semver (`1.00 → 1.0.0`, `1.01 → 1.0.1`, `1.10 → 1.1.0`). Never hand-edit; the app only reads. |
 | Cache a forecast | `src/lib/cache.ts` | TTL 20 min; stale data is shown with a notice, never silently refreshed. |
 | Render an error | `src/components/ErrorBanner.tsx` | Fed by `App`'s single `error` state. |
 | Generate hero art | `scripts/generate-heroes.mjs` | Prompts live in the script; output is WebP at 1600/800/320 (1600×1067, 3:2). Never hand-edit `public/heroes/` — regenerate. |

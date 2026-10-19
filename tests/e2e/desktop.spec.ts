@@ -39,6 +39,22 @@ test('day boundaries are marked on 48-hour and 7-day views', async ({ page }) =>
   await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-7day.png' })
 })
 
+test('the version and its What\'s new history are visible', async ({ page }) => {
+  await boot(page)
+  await expect(page.getByTestId('app-version')).toHaveText(/^v\d+\.\d{2}$/)
+  await page.getByTestId('whats-new').click()
+
+  const dialog = page.getByRole('dialog', { name: /What.?s new/ })
+  await expect(dialog).toBeVisible()
+  await expect(dialog).toContainText(/Version \d+\.\d{2}/)
+  await expect(dialog).toContainText('First numbered release')
+  await expect(dialog.locator('.history__entry').first()).toHaveClass(/is-current/)
+  await page.screenshot({ path: 'artifacts/desktop-whatsnew.png' })
+
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+})
+
 test('a 16-day horizon is selectable and fetches sixteen days', async ({ page }) => {
   await boot(page)
   const request = page.waitForRequest((url) => url.url().includes('forecast_days=16'))

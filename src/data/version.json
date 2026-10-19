@@ -1,0 +1,17 @@
+{
+  "version": "1.00",
+  "history": [
+    {
+      "version": "1.00",
+      "date": "2026-10-19",
+      "title": "First numbered release",
+      "changes": [
+        "Eleven global models, one per base model, with every excluded duplicate documented",
+        "Null-aware average with a spread band, plus each model's own forecast",
+        "Provider tooltips: who runs each model, where, and which models they contribute",
+        "Day-bounded charts with a real 168-hour week and a 7 / 10 / 16-day horizon",
+        "Installable PWA with an offline forecast cache"
+      ]
+    }
+  ]
+}

@@ -7,7 +7,7 @@ select — every line attributable, every gap visible.
 One static web app. No backend, no API key, no tracking. Works on a desktop browser
 and installs as a PWA on a phone.
 
-Source: <https://github.com/ArndRosemeier/Weather> · Live: <https://apps.futuremagic.de/weather/>
+Source: <https://github.com/ArndRosemeier/Weather> · Live: <https://apps.futuremagic.de/weather/> · Version 1.00
 
 ![Weather Compare on a desktop browser](docs/media/desktop.webp)
 
@@ -78,7 +78,7 @@ pnpm preview      # http://localhost:4173/weather/
 
 ```bash
 bash scripts/gate.sh            # the gate: build + unit + Playwright (exit 0 green)
-pnpm test:unit                  # 41 unit tests
+pnpm test:unit                  # 45 unit tests
 pnpm test:e2e                   # Playwright, 1440 px desktop and 390 px phone
 LIVE=1 pnpm test:e2e            # opt-in live contract check against Open-Meteo
 ```
@@ -86,6 +86,20 @@ LIVE=1 pnpm test:e2e            # opt-in live contract check against Open-Meteo
 E2E runs against recorded fixtures, including a real capture in which three models
 were offline, so the unavailable path is tested without depending on the network.
 Screenshots are written to `artifacts/` for visual review.
+
+## Versioning
+
+The app shows a version in the top bar (`v1.00`) and a **What's new** button listing
+the full history. The number rises by **0.01 on every push**. One command owns it:
+
+```bash
+pnpm release --title "Provider tooltips" \
+  --note "Hover a provider name for who they are" \
+  --note "Coverage reports the window, not the fetch cap"
+```
+
+It writes `src/data/version.json` (version + newest-first history, which the app reads)
+and syncs `package.json` to the matching semver. Then commit, gate, push.
 
 ## Data and licensing
 

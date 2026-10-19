@@ -62,6 +62,10 @@ pnpm heroes              # regenerate hero art (or image, Meta Muse)
 - **Push only on the owner's explicit instruction; never deploy.** A `git push` to
   `origin/main` is allowed when he asks. Deploying, publishing to a static host, or
   force-pushing `main` remains forbidden.
+- **Every push bumps the visible version by 0.01.** Run
+  `pnpm release --title "…" --note "…"` before the final commit — it writes
+  `src/data/version.json` (the What's-new history) and syncs `package.json`. Never
+  hand-edit the version; never push without the bump.
 - **Never run a long check in the foreground of the dispatcher session.** Use a
   background job and wait for the notice; a writer runs its checks in-turn.
 - **A writer works only in its own worktree with ABSOLUTE paths.** At most two

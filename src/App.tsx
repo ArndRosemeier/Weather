@@ -17,6 +17,8 @@ import { LocationSearch } from './components/LocationSearch'
 import { Attribution } from './components/Attribution'
 import { ErrorBanner, NoticeBanner } from './components/Banners'
 import { UiIcon } from './components/UiIcon'
+import { WhatsNew } from './components/WhatsNew'
+import { VERSION } from './lib/version'
 import { conditionFor } from './lib/wmo'
 
 type RangeMode = '24h' | '48h' | 'all' | 'day'
@@ -39,6 +41,7 @@ export default function App() {
   const [range, setRange] = useState<{ mode: RangeMode; day?: number }>({ mode: '48h' })
   const [focusModelId, setFocusModelId] = useState<string | null>(null)
   const [locationOpen, setLocationOpen] = useState(false)
+  const [whatsNewOpen, setWhatsNewOpen] = useState(false)
   const [attempt, setAttempt] = useState(0)
 
   const updateSettings = useCallback((patch: Partial<Settings>) => {
@@ -195,8 +198,13 @@ export default function App() {
           <div className="brand">
             <img className="brand__mark" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width={30} height={30} />
             <span className="brand__name">Weather Compare</span>
+            <span className="brand__version" data-testid="app-version">v{VERSION}</span>
           </div>
           <div className="topbar__actions">
+            <button type="button" className="whats-new" data-testid="whats-new" onClick={() => setWhatsNewOpen(true)}>
+              <UiIcon name="info" size={16} />
+              <span>What&apos;s new</span>
+            </button>
             <button type="button" className="location-button" onClick={() => setLocationOpen(true)}>
               <UiIcon name="location" size={16} />
               <span>{settings.location.name}</span>
@@ -387,6 +395,8 @@ export default function App() {
       </main>
 
       <Attribution />
+
+      <WhatsNew open={whatsNewOpen} onClose={() => setWhatsNewOpen(false)} />
 
       <LocationSearch
         open={locationOpen}
