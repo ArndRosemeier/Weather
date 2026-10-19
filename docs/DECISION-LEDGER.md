@@ -46,12 +46,19 @@ needed a second attempt — all 14 passed on the first render.
 | `frost` | hoarfrost crystals on branches in a cold blue dawn, pale pink light | crystal-coated shrub against a pink-blue dawn and a frosted meadow | 121 KB |
 
 **Verification at landing** (`slice/heroes`, base `63ce9a2`): `pnpm test:unit` **28 passed**
-(6 files); `pnpm run typecheck` exit **0**; `GATE_TESTS=0 bash scripts/gate.sh` exit **1**
-(RED) — not the `2` a cheap-only run reports when the build passes, and not caused by this
-row: `vite build` cannot resolve `/src/main.tsx`, which is absent at `63ce9a2` *and* at
-`main` (`b721829`), so the cheap tier cannot pass before the UI row lands. Raw log:
-`/home/administrator/projects/Weather/.gate-logs/gate.log`. **Gap found, not fixed in this
-landing:** nothing in the unit suite pins the 14 `HeroKey`s to the 42 files; `AGENTS.md`
+(6 files); `pnpm run typecheck` exit **0**. The cheap tier was run twice, both
+`GATE_TESTS=0 bash scripts/gate.sh` → **exit 1 (RED)**, not the `2` a cheap-only run reports
+when the build passes, and in neither case caused by this row: `vite build` cannot resolve
+`/src/main.tsx`, which is absent at `63ce9a2` *and* at `main` (`b721829`), so the cheap tier
+cannot pass before the UI row lands. Run 1 — this worktree at `63ce9a2`; journal line
+`tier=cheap, exit=1, branch=slice/heroes`. Run 2 — `main` `b721829`, in a throwaway detached
+worktree (removed afterwards), because at that moment main's *working tree* held another
+row's uncommitted UI (`src/main.tsx`, `App.tsx`, `components/`, `styles.css`, `dist/`, E2E
+fixtures): building there would have journalled `sha=b721829` while actually compiling
+uncommitted code — a false record. The clean checkout gives b721829 its own honest line
+(`tier=cheap, exit=1, sha=b721829…, branch=HEAD`). Shared raw log:
+`/home/administrator/projects/Weather/.gate-logs/gate.log` (latest run); copies of both runs
+are in `.gate-logs/` (gitignored). **Gap found, not fixed in this landing:** nothing in the unit suite pins the 14 `HeroKey`s to the 42 files; `AGENTS.md`
 rule 5 and `TESTING.md` said a unit test proves hero completeness — it does not, the check
 is the manual artefact/visual pass described in `TESTING.md`. Also `heroFor` can never
 return `wind`: no WMO code maps to it, so the asset is generated but unreachable until the
