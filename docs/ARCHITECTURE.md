@@ -33,7 +33,7 @@ public/sw.js                     offline shell only — never API data
 | Map a weather code | `conditionFor` / `heroFor` | Unknown code is labelled "Unknown conditions". |
 | Cache a forecast | `src/lib/cache.ts` | TTL 20 min; stale data is shown with a notice, never silently refreshed. |
 | Render an error | `src/components/ErrorBanner.tsx` | Fed by `App`'s single `error` state. |
-| Generate hero art | `scripts/generate-heroes.mjs` | Prompts live in the script; output is WebP at 320/800/1600. |
+| Generate hero art | `scripts/generate-heroes.mjs` | Prompts live in the script; output is WebP at 1600/800/320 (1600×1067, 3:2). Never hand-edit `public/heroes/` — regenerate. |
 
 ## The data contract (measured 2026-10-19)
 
@@ -63,6 +63,37 @@ public/sw.js                     offline shell only — never API data
 - Daily: mean of each model's daily max/min (not the max of the averaged curve), so
   the daily card matches "what the models say" rather than a derived curve.
 - Models with `status: 'unavailable'` are excluded and shown greyed with a reason.
+
+## Hero art pipeline
+
+One script, `scripts/generate-heroes.mjs`, is the only way a hero exists. It calls
+`or image` once per condition family with `--model meta/muse-image --aspect 3:2
+--resolution 2K`, appending a shared `STYLE` suffix that carries the readability
+contract for every key: cinematic landscape photograph, no people, no text, no
+watermark, no logos, subject centred, and the lower third calm and uncluttered for a
+text overlay. A prompt that fights the overlay is a bug in the prompt, not a
+post-processing problem.
+
+- **Raw.** `assets/raw-heroes/<key>.webp`, 1920×1280, gitignored. The provider returns
+  **WebP regardless of the `.png` output path**, so the script re-encodes from
+  whichever file actually appeared (the printed CLI path is authoritative) and never
+  trusts the extension.
+- **Skip semantics.** A raw that already exists is skipped. Regenerating one key is
+  therefore: delete `assets/raw-heroes/<key>.webp` *and* `public/heroes/<key>-*.webp`,
+  rerun — the other 13 are untouched and nothing is paid for twice. Policy is at most
+  two attempts per key.
+- **Derived.** `public/heroes/<key>-{1600,800,320}.webp`, a centre `cover` crop at 3:2
+  (1600×1067 · 800×533 · 320×213), WebP quality **80** at 1600 and **76** at the two
+  small widths. 1600 is the desktop/retina source, 800 the phone default, 320 the
+  thumbnail. Measured set: 42 files, 2,044,774 B total (the 1600 files alone 1.44 MB).
+- **Icons.** Rendered from `public/icon.svg` in the same run — 192 and 512 for the
+  manifest (`any` and `maskable`), 180 for `apple-touch-icon.png`. The SVG is the only
+  icon source; no PNG is hand-drawn.
+- **The key set is the contract** with `HeroKey` in `src/lib/wmo.ts`: adding a family
+  means a prompt entry *and* a `HeroKey`, and `heroFor` must be able to return it.
+  Today `wind` is generated but unreachable — no WMO code maps to it — so a wind-speed
+  rule is still owed. Nothing in the unit suite pins the 14 keys to the 42 files yet;
+  the artefact and visual checks in `TESTING.md` are the guard.
 
 ## PWA
 

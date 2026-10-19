@@ -18,7 +18,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Unit | `tests/unit/api.test.ts` | URL shape, suffix handling, null preservation, loud failures, per-model availability |
 | Unit | `tests/unit/average.test.ts` | null-aware mean, spread band, consensus code, no-zero substitution, daily semantics |
 | Unit | `tests/unit/units.test.ts` | conversions and "—" for missing values |
-| Unit | `tests/unit/wmo.test.ts` | code mapping, day/night, unknown-code honesty, hero completeness |
+| Unit | `tests/unit/wmo.test.ts` | code → label/icon, day/night hero, temperature extremes, unknown-code honesty (`HeroKey` is a compile-time union; no test pins the 14 keys to the 42 files — see *Image artefacts*) |
 | Unit | `tests/unit/cache.test.ts` | TTL, corrupt entries, storage that throws |
 | E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API) |
 | Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; run manually, record the numbers |
@@ -33,6 +33,36 @@ tested; the transformation is in `tests/fixtures/derive-all.mjs`.
 
 E2E intercepts `**/v1/forecast**` and `**/v1/search**`; no test depends on the live
 service except the opt-in live spec.
+
+## Image artefacts (heroes + icons)
+
+There is no automated image test yet — no UI, so no screenshot layer. The art check is a
+deterministic command plus a human judgement, and both are part of landing an art change:
+
+- **Count and geometry** (one-off `node -e` with sharp metadata): `public/heroes/*.webp`
+  = 42 (14 `HeroKey`s × 1600/800/320); every `-1600` is 1600×1067, `-800` 800×533, `-320`
+  320×213 — the 3:2 centre crop, never letterboxed.
+- **Icons** (sharp metadata): `public/icon-192.png` 192×192, `public/icon-512.png`
+  512×512, `public/apple-touch-icon.png` 180×180.
+- **Bytes:** every `-1600` should land in 60–500 KB. Measured 2026-10-19: 12/14 in range;
+  `clear-day` 41 KB and `overcast` 39 KB are deliberately smooth, low-frequency skies.
+  A q88 re-encode was measured at +60% bytes with no visible or measurable gain (170 vs
+  173 distinct levels in a 3× crop), so the bound is a *degenerate-output alarm*, not a
+  quality target: flag a file only when it is under the floor **and** inspection shows
+  blur, banding or a flat fill.
+- **Look:** open every 1600 px file and judge it against the art-direction bar — no text,
+  letters, watermarks or logos; no people; the subject matches its `HeroKey`;
+  photographic rather than illustrated; a calm lower third; no two keys near-duplicates.
+  Per-key verdicts and sizes live in `docs/DECISION-LEDGER.md` (row 5 evidence). A frame
+  that fails gets its key regenerated: delete the raw plus its three widths, rerun
+  `node scripts/generate-heroes.mjs`, at most two attempts.
+- **Lower-third busyness** is measurable instead of arguable: RMS Laplacian of the bottom
+  third per key (recorded in the ledger). Read it as texture, not clutter — `snow` scores
+  21.7 purely from falling flakes over a clean slope, while the two urban scenes
+  (drizzle 15.3, rain 14.9) are the ones that need the UI's text scrim.
+
+The images are not type-checked and no test reads them: the cheap gate passing says
+nothing about the hero set, so this section is the check.
 
 ## Evidence rules
 
