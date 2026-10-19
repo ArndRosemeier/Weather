@@ -40,7 +40,8 @@ Excluded on purpose: lower-resolution copies of IFS, "seamless" blends that only
 regional domains (HRRR, ICON-EU/D2, AROME, MSM, HRDPS, UK 2 km), regional-only
 models (MET Norway, KNMI, DMI), and ensemble members of ACCESS-G. The full list with
 reasons is in the app under **"Why only these models?"** and in
-`src/lib/models.ts` (`SUPERSEDED`).
+`src/lib/models.ts` (`SUPERSEDED`). Hover (or keyboard-focus) a provider name in the
+model table for who that organisation is.
 
 ## How it works
 

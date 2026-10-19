@@ -39,6 +39,30 @@ test('day boundaries are marked on 48-hour and 7-day views', async ({ page }) =>
   await page.locator('#hourly').screenshot({ path: 'artifacts/desktop-7day.png' })
 })
 
+test('provider names explain the organisation behind a model', async ({ page }) => {
+  await boot(page)
+  const trigger = page.locator('[data-testid="provider-trigger"][data-provider-id="ecmwf"]').first()
+  await trigger.scrollIntoViewIfNeeded()
+  await trigger.hover()
+
+  const tooltip = page.getByRole('tooltip')
+  await expect(tooltip).toBeVisible()
+  await expect(tooltip).toContainText('European Centre for Medium-Range Weather Forecasts')
+  await expect(tooltip).toContainText('Reading, United Kingdom')
+  await expect(tooltip).toContainText('Models here: ECMWF IFS, ECMWF AIFS')
+  await expect(tooltip).toContainText('Official site')
+  await page.screenshot({ path: 'artifacts/desktop-provider-tooltip.png' })
+
+  await page.mouse.move(4, 4)
+  await expect(tooltip).toBeHidden()
+
+  // Keyboard users get the same explanation, and Escape dismisses it.
+  await trigger.focus()
+  await expect(tooltip).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(tooltip).toBeHidden()
+})
+
 test('hovering and keyboarding the chart exposes per-model values', async ({ page }) => {
   await boot(page)
   const plot = page.getByTestId('chart-plot')

@@ -337,6 +337,7 @@ export default function App() {
               </div>
               <ModelPicker
                 selectedIds={settings.modelIds}
+                windowHours={windowHours}
                 onChange={(ids) => updateSettings({ modelIds: ids })}
                 availability={availability}
                 horizons={horizons}

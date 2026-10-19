@@ -9,6 +9,7 @@ export interface ModelInfo {
   name: string
   shortName: string
   provider: string
+  providerId: string
   baseModel: string
   kind: ModelKind
   color: string

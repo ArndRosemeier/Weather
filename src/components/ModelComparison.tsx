@@ -2,6 +2,7 @@ import type { ModelForecast, UnitSystem } from '../lib/types'
 import { formatPrecip, formatTemp, formatWind } from '../lib/units'
 import { conditionFor } from '../lib/wmo'
 import { WeatherIcon } from './WeatherIcon'
+import { ProviderTooltip } from './ProviderTooltip'
 
 interface Props {
   models: ModelForecast[]
@@ -25,7 +26,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
             <th scope="col">High</th>
             <th scope="col">Low</th>
             <th scope="col">Rain today</th>
-            <th scope="col">Covers</th>
+            <th scope="col">Coverage</th>
           </tr>
         </thead>
         <tbody>
@@ -52,7 +53,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
                 <th scope="row">
                   <span className="comparison__swatch" style={{ background: entry.model.color }} />
                   <span className="comparison__name">{entry.model.name}</span>
-                  <span className="comparison__provider">{entry.model.provider}</span>
+                  <ProviderTooltip providerId={entry.model.providerId} className="comparison__provider" />
                 </th>
                 <td>
                   {entry.status === 'unavailable' ? (
@@ -68,7 +69,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
                 <td>{formatTemp(day?.tempMin ?? null, system)}</td>
                 <td>{formatPrecip(day?.precipitationSum ?? null, system)}</td>
                 <td className={covered ? 'comparison__cover' : 'comparison__cover comparison__cover--short'}>
-                  {entry.status === 'unavailable' ? '—' : `${(entry.horizonHours / 24).toFixed(1)} d`}
+                  {entry.status === 'unavailable' ? '—' : covered ? 'Full window' : `${(entry.horizonHours / 24).toFixed(1)} d`}
                 </td>
               </tr>
             )
@@ -76,7 +77,7 @@ export function ModelComparison({ models, system, nowIndex, dayIndex, windowHour
         </tbody>
       </table>
       <p className="comparison__hint">
-        Click a row to focus that model in the chart. Wind gusts and humidity stay in the current-conditions panel.
+        Click a row to focus that model in the chart. Coverage says how much of the selected window the model forecasts — “Full window” is complete, a number means it ends earlier. Wind gusts and humidity stay in the current-conditions panel.
         {models.some((entry) => entry.status === 'unavailable') ? ' “No data” means the provider returned no values for this run — it is not a zero forecast.' : ''}
       </p>
       <ul className="comparison__extra" aria-label="Wind and humidity by model">
