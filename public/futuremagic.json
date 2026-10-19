@@ -1,0 +1,14 @@
+{
+  "title": "Weather Compare",
+  "tagline": "Global weather models side by side, and averaged into one forecast.",
+  "tags": [
+    "weather",
+    "forecast",
+    "models",
+    "comparison",
+    "PWA"
+  ],
+  "screenshot": "/shots/weather.png",
+  "description": "Global weather models disagree \u2014 this app shows the disagreement. Forecasts from 11 independent models side by side, plus a plain average across the ones you select: every line attributable, every gap visible. No backend, no API key, no tracking.",
+  "cta": "Compare the models"
+}

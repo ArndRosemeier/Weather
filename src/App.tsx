@@ -193,7 +193,7 @@ export default function App() {
       <header className="topbar">
         <div className="topbar__inner">
           <div className="brand">
-            <img className="brand__mark" src="/icon.svg" alt="" width={30} height={30} />
+            <img className="brand__mark" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width={30} height={30} />
             <span className="brand__name">Weather Compare</span>
           </div>
           <div className="topbar__actions">

@@ -38,7 +38,7 @@ export function DailyStrip({ days, system, activeDay, onSelectDay }: Props) {
               <span className="day__date">{dateLabel(day.date)}</span>
             </div>
             <div className="day__visual">
-              <img className="day__image" src={`/heroes/${hero}-320.webp`} alt="" loading="lazy" decoding="async" aria-hidden="true" />
+              <img className="day__image" src={`${import.meta.env.BASE_URL}heroes/${hero}-320.webp`} alt="" loading="lazy" decoding="async" aria-hidden="true" />
               <span className="day__icon" style={{ color: 'var(--text)' }}>
                 <WeatherIcon icon={condition.icon} size={26} />
               </span>

@@ -37,8 +37,8 @@ export function Hero({ location, heroKey, temperatureC, apparentC, weatherCode, 
         <img
           className="hero__image"
           key={heroKey}
-          src={`/heroes/${heroKey}-1600.webp`}
-          srcSet={`/heroes/${heroKey}-800.webp 800w, /heroes/${heroKey}-1600.webp 1600w`}
+          src={`${import.meta.env.BASE_URL}heroes/${heroKey}-1600.webp`}
+          srcSet={`${import.meta.env.BASE_URL}heroes/${heroKey}-800.webp 800w, ${import.meta.env.BASE_URL}heroes/${heroKey}-1600.webp 1600w`}
           sizes="100vw"
           alt=""
           decoding="async"

@@ -9,8 +9,8 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE)
-      const response = await fetch('/')
-      await cache.put('/index.html', response.clone())
+      const response = await fetch('/weather/')
+      await cache.put('/weather/index.html', response.clone())
       const html = await response.text()
       const urls = [...html.matchAll(/(?:src|href)="(\/[^"]+)"/g)]
         .map((match) => match[1])
@@ -47,10 +47,10 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone()
-          caches.open(CACHE).then((cache) => cache.put('/index.html', copy))
+          caches.open(CACHE).then((cache) => cache.put('/weather/index.html', copy))
           return response
         })
-        .catch(() => caches.match('/index.html').then((hit) => hit ?? Response.error())),
+        .catch(() => caches.match('/weather/index.html').then((hit) => hit ?? Response.error())),
     )
     return
   }
