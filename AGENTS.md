@@ -18,8 +18,10 @@ This project is worked from DSH and Claude Code. The contract is
 
 - **Start:** read `HANDOFF.md`, run `node scripts/cos.mjs status --one-line`, and
   reconcile against git, the worktrees and the gate lock before dispatching.
-- **There is no git remote, by owner decision.** Reconcile against local `main`;
-  never invent a push step. "Do not push anything yourself" is standing.
+- **Remote:** `origin` = `https://github.com/ArndRosemeier/Weather` (public).
+  Reconcile against `origin/main`. **Push only when the owner explicitly asks** — he
+  reversed the original no-push rule on 2026-10-19 (ledger row 14). Never force-push
+  `main`; never deploy or publish to a host.
 - **One gate:** `bash scripts/gate.sh` (exit `0` green · `1` red · `2` cheap only ·
   `9` refused/void). It journals every run to `.cos/journal.jsonl`.
 - **Procedures:** `.claude/commands/*.md`; **roles:** `.claude/agents/*.md`.
@@ -57,7 +59,9 @@ pnpm heroes              # regenerate hero art (or image, Meta Muse)
 
 ## Standing rules
 
-- **Do not push, publish or deploy.** No remote, no static-host upload.
+- **Push only on the owner's explicit instruction; never deploy.** A `git push` to
+  `origin/main` is allowed when he asks. Deploying, publishing to a static host, or
+  force-pushing `main` remains forbidden.
 - **Never run a long check in the foreground of the dispatcher session.** Use a
   background job and wait for the notice; a writer runs its checks in-turn.
 - **A writer works only in its own worktree with ABSOLUTE paths.** At most two

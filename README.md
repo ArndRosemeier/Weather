@@ -7,6 +7,8 @@ select — every line attributable, every gap visible.
 One static web app. No backend, no API key, no tracking. Works on a desktop browser
 and installs as a PWA on a phone.
 
+Source: <https://github.com/ArndRosemeier/Weather>
+
 ![Weather Compare on a desktop browser](docs/media/desktop.webp)
 
 ## Why these models

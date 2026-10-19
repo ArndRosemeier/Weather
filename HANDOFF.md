@@ -1,11 +1,11 @@
 # Handoff
 
-**State (2026-10-19T14:53Z):** DONE and verified. Two journal records:
-full gate on `909d490` — **exit 0**, 30/30 unit (7 files), 11 E2E passed /
-1 skipped, 27 s, lock acquired; and cheap tier on `9c2965b` — **exit 2**,
-build green, suite intentionally not run because `909d490..9c2965b` is four
-docs files. Exit 2 is not a full pass; the behaviour evidence for this tree
-is the full run on the code-identical parent. Live contract check passed separately against the real
+**State (2026-10-19T14:55Z):** DONE, verified **and pushed**. Full gate on
+`db014a0` — **exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped, 25 s,
+lock acquired. Initial push `db014a0` verified by SHA equality (`git ls-remote`), repository
+public at `https://github.com/ArndRosemeier/Weather`; this record commit is pushed
+only after its own full gate, and the journal carries its sha. Earlier records: full gate on `909d490`
+(exit 0) and cheap tier on `9c2965b` (exit 2, docs-only delta — not a full pass). Live contract check passed separately against the real
 Open-Meteo API (8 of 11 models had data; AIFS, GraphCast, BOM were offline).
 Screenshots reviewed by the dispatcher: desktop 1440, mobile 390, mobile chart,
 tooltip, and a live full-page render.
@@ -34,8 +34,9 @@ pnpm build && pnpm preview    # http://localhost:4173
 bash scripts/gate.sh          # build + unit + Playwright; exit 0 green
 ```
 
-No git remote exists and none may be added: the owner's standing rule is "do not
-push". There is no deploy step.
+`origin` is `https://github.com/ArndRosemeier/Weather`. The owner reversed the
+original no-push rule on 2026-10-19 ("Please push to here") — see ledger row 14.
+Push only when he asks; never force-push `main`; there is still no deploy step.
 
 ## What is next
 
@@ -43,7 +44,7 @@ Nothing is owed. The app is complete and tested. If a successor picks this up:
 
 1. Re-run `bash scripts/gate.sh` before changing anything (exit 9 = lock busy).
 2. Known, deliberate non-goals: no backend, no saved accounts, no license file
-   (owner decision), no deployment, no git remote.
+   (owner decision), no deployment.
 
 ## Traps already known
 
