@@ -48,6 +48,17 @@ test('phone layout at 390px has no horizontal overflow', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('on a phone the title opens What\'s new and the button is hidden', async ({ page }) => {
+  await boot(page)
+  await expect(page.getByTestId('whats-new')).toBeHidden()
+  await page.getByTestId('brand').click()
+  const dialog = page.getByRole('dialog', { name: /What.?s new/ })
+  await expect(dialog).toBeVisible()
+  await page.screenshot({ path: 'artifacts/mobile-whatsnew.png' })
+  await page.getByLabel("Close What's new").click()
+  await expect(dialog).toBeHidden()
+})
+
 test('the location sheet works on a phone', async ({ page }) => {
   await boot(page)
   await page.locator('.hero__place').click()

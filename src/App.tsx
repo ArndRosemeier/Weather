@@ -196,11 +196,17 @@ export default function App() {
 
       <header className="topbar">
         <div className="topbar__inner">
-          <div className="brand">
+          <button
+            type="button"
+            className="brand brand--button"
+            onClick={() => setWhatsNewOpen(true)}
+            data-testid="brand"
+          >
             <img className="brand__mark" src={`${import.meta.env.BASE_URL}icon.svg`} alt="" width={30} height={30} />
             <span className="brand__name">Weather Compare</span>
             <span className="brand__version" data-testid="app-version">v{VERSION}</span>
-          </div>
+            <span className="sr-only">— what&apos;s new</span>
+          </button>
           <div className="topbar__actions">
             <button type="button" className="whats-new" data-testid="whats-new" onClick={() => setWhatsNewOpen(true)}>
               <UiIcon name="info" size={16} />

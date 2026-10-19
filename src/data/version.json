@@ -1,6 +1,15 @@
 {
-  "version": "1.01",
+  "version": "1.02",
   "history": [
+    {
+      "version": "1.02",
+      "date": "2026-10-19",
+      "title": "What's new on the title",
+      "changes": [
+        "On phones the What's new button is gone",
+        "Tapping the app title or logo opens What's new there"
+      ]
+    },
     {
       "version": "1.01",
       "date": "2026-10-19",

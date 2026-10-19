@@ -95,6 +95,18 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
   gap: 14px;
 }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand--button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.brand--button:hover .brand__name { color: var(--accent); }
+.brand--button:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .brand__mark { border-radius: 9px; flex: none; }
 .brand__name { font-weight: 600; letter-spacing: -0.01em; font-size: 15px; white-space: nowrap; }
 .brand__version {
@@ -312,7 +324,9 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 .chart__grid { stroke: rgba(255, 255, 255, 0.07); stroke-width: 1; }
 .chart__axis { fill: var(--muted-2); font-size: 10.5px; font-family: var(--font); }
 .chart__axis--day { fill: rgba(255, 255, 255, 0.82); font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em; }
-@media (max-width: 720px) { .chart__axis--day { font-size: 9.5px; } }
+@media (max-width: 720px) {
+  .chart__axis--day { font-size: 9.5px; }
+}
 .chart__dayline { stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; }
 .chart__cursor { stroke: rgba(255, 255, 255, 0.3); stroke-width: 1; stroke-dasharray: 3 4; }
 .chart__unit { fill: var(--muted-2); font-size: 10.5px; font-family: var(--font); }
@@ -714,24 +728,10 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
   body { font-size: 14.5px; }
   .topbar__inner { padding: 0 16px; height: 56px; }
   .brand__name { font-size: 14px; }
-  .whats-new span { display: none; }
-  .whats-new { padding: 8px; }
+  /* On a phone the title is the What's-new trigger; the separate button is gone. */
+  .whats-new { display: none; }
   .brand__mark { width: 26px; height: 26px; }
-  .whats-new {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 11px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 12.5px;
-  cursor: pointer;
-}
-.whats-new:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
-
-.location-button { max-width: 120px; padding: 7px 10px; }
+  .location-button { max-width: 120px; padding: 7px 10px; }
   .hero { min-height: 74svh; border-radius: 0 0 22px 22px; }
   .hero__content { padding: 0 16px 26px; }
   .hero__temp { font-size: clamp(64px, 22vw, 104px); }
@@ -756,21 +756,7 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
 
 @media (max-width: 420px) {
   .brand__name { display: none; }
-  .whats-new {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 11px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 12.5px;
-  cursor: pointer;
-}
-.whats-new:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
-
-.location-button { max-width: 150px; }
+  .location-button { max-width: 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
