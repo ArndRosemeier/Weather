@@ -37,7 +37,7 @@ else
 fi
 
 CHEAP_CMD="${GATE_CHEAP_CMD:-pnpm run build}"
-FULL_CMD="${GATE_FULL_CMD:-pnpm run test:all}"
+FULL_CMD="${GATE_FULL_CMD:-pnpm run verify}"
 LOG_DIR="${GATE_LOG_DIR:-$REPO_ROOT/.gate-logs}"
 LOCK_DIR="${GATE_LOCK_DIR:-$REPO_ROOT/.gate-lock}"
 STALE_MIN="${GATE_STALE_MIN:-30}"

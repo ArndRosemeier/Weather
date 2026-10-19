@@ -30,7 +30,7 @@ beforeEach(() => {
 
 describe('forecast cache', () => {
   it('round-trips a bundle and reports freshness', () => {
-    writeCache({ savedAt: Date.now(), bundle: bundle() })
+    writeCache(bundle(), 7)
     const hit = readCache(52.5244, 13.4105, 7)
     expect(hit?.bundle.timezone).toBe('Europe/Berlin')
     expect(isFresh(hit!.savedAt)).toBe(true)
@@ -54,7 +54,7 @@ describe('forecast cache', () => {
         length: 0,
       } as unknown as Storage,
     }
-    expect(() => writeCache({ savedAt: Date.now(), bundle: bundle() })).not.toThrow()
+    expect(() => writeCache(bundle(), 7)).not.toThrow()
     expect(readCache(52.5, 13.4, 7)).toBeNull()
   })
 })

@@ -22,6 +22,8 @@ describe('WMO conditions', () => {
     expect(heroFor(61, true, 15)).toBe('rain')
     expect(heroFor(3, true, 34)).toBe('heat')
     expect(heroFor(3, true, -9)).toBe('frost')
+    expect(heroFor(3, true, 12, 70)).toBe('wind')
+    expect(heroFor(61, true, 12, 70)).toBe('rain')
   })
 
   it('uses sunrise and sunset when present and clock hours otherwise', () => {

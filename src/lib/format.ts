@@ -27,3 +27,16 @@ export function updatedLabel(fetchedAt: number, utcOffsetSeconds: number): strin
   const minutes = String(shifted.getUTCMinutes()).padStart(2, '0')
   return `${hours}:${minutes}`
 }
+
+/** Index of the hour the user is living in, from local ISO times plus the API's
+ *  UTC offset. Never uses the browser's own timezone: the forecast is local to the
+ *  place being viewed. */
+export function currentHourIndex(times: string[], utcOffsetSeconds: number, now = Date.now()): number {
+  if (times.length === 0) return 0
+  const shifted = new Date(now + utcOffsetSeconds * 1000)
+  const pad = (value: number) => String(value).padStart(2, '0')
+  const stamp = `${shifted.getUTCFullYear()}-${pad(shifted.getUTCMonth() + 1)}-${pad(shifted.getUTCDate())}T${pad(shifted.getUTCHours())}:00`
+  const index = times.findIndex((time) => time >= stamp)
+  if (index === -1) return times.length - 1
+  return index
+}

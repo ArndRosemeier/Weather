@@ -66,10 +66,13 @@ export function isDaylight(timeIso: string, sunrise: string | null, sunset: stri
 }
 
 /** The hero image family for a condition. Extremes of temperature win over a
- *  generic clear/cloud picture, which is what people actually feel. */
-export function heroFor(code: number | null, daylight: boolean, tempC: number | null): HeroKey {
+ *  generic clear/cloud picture, which is what people actually feel; a gale wins
+ *  over a merely cloudy sky. */
+export function heroFor(code: number | null, daylight: boolean, tempC: number | null, windKmh: number | null = null): HeroKey {
   if (tempC !== null && tempC >= 33) return 'heat'
   if (tempC !== null && tempC <= -8) return 'frost'
+  const wet = code !== null && ((code >= 51 && code <= 67) || (code >= 71 && code <= 86) || code >= 95)
+  if (windKmh !== null && windKmh >= 55 && !wet) return 'wind'
   if (code === null) return daylight ? 'overcast' : 'clear-night'
   if (code <= 1) return daylight ? 'clear-day' : 'clear-night'
   if (code === 2) return daylight ? 'partly-cloudy-day' : 'partly-cloudy-night'

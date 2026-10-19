@@ -37,11 +37,11 @@ export function readCache(latitude: number, longitude: number, days: number): Ca
   }
 }
 
-export function writeCache(cached: CachedForecast): void {
+export function writeCache(bundle: ForecastBundle, days: number, savedAt = Date.now()): void {
   const store = storage()
   if (!store) return
   try {
-    store.setItem(cacheKey(cached.bundle.location.latitude, cached.bundle.location.longitude, cached.bundle.hourlyTimes.length / 24), JSON.stringify(cached))
+    store.setItem(cacheKey(bundle.location.latitude, bundle.location.longitude, days), JSON.stringify({ savedAt, bundle }))
   } catch {
     /* Quota or private mode: caching is optional enrichment, never a failure. */
   }

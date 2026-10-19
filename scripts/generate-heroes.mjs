@@ -76,7 +76,6 @@ for (const [key, prompt] of Object.entries(PROMPTS)) {
         .webp({ quality: width === 1600 ? 80 : 76 })
         .toFile(path.join(OUT_DIR, `${key}-${width}.webp`))
     }
-    const bytes = 1600
     console.log(`ok ${key}`)
   } catch (error) {
     failures.push(`${key}: ${error.message}`)
@@ -91,6 +90,10 @@ if (existsSync(iconSvg)) {
     await sharp(iconSvg).resize(size, size).png().toFile(path.join(ROOT, 'public', `icon-${size}.png`))
   }
   await sharp(iconSvg).resize(180, 180).png().toFile(path.join(ROOT, 'public', 'apple-touch-icon.png'))
+  const maskable = path.join(ROOT, 'public', 'icon-maskable.svg')
+  if (existsSync(maskable)) {
+    await sharp(maskable).resize(512, 512).png().toFile(path.join(ROOT, 'public', 'icon-512-maskable.png'))
+  }
   console.log('ok icons')
 }
 

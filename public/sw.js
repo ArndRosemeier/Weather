@@ -2,8 +2,32 @@
    (localStorage), so this worker only keeps the static shell and hashed assets. */
 const CACHE = 'weather-compare-shell-v1'
 
-self.addEventListener('install', () => {
-  self.skipWaiting()
+self.addEventListener('install', (event) => {
+  // Precache the shell and its hashed assets at install time. Without this the
+  // first visit's requests happen before the worker controls the page, and an
+  // offline reload would have no shell to fall back to.
+  event.waitUntil(
+    (async () => {
+      const cache = await caches.open(CACHE)
+      const response = await fetch('/')
+      await cache.put('/index.html', response.clone())
+      const html = await response.text()
+      const urls = [...html.matchAll(/(?:src|href)="(\/[^"]+)"/g)]
+        .map((match) => match[1])
+        .filter((url) => !url.startsWith('//'))
+      await Promise.all(
+        urls.map(async (url) => {
+          try {
+            const asset = await fetch(url)
+            if (asset.ok) await cache.put(url, asset)
+          } catch {
+            /* an asset that fails to precache is retried by the fetch handler */
+          }
+        }),
+      )
+      await self.skipWaiting()
+    })(),
+  )
 })
 
 self.addEventListener('activate', (event) => {
