@@ -13,14 +13,16 @@ branch, worktree, session id, path.
 ```
 reconciled: main @ 63ce9a2 · 2026-10-19T14:31Z
 
-SESSION | id=session-1afeb651 | model=deepseek-flash | state=verifying
+SESSION | id=session-1afeb651 | model=deepseek-flash | state=complete
 
 LANDED | row=5 | sha=66cbfb6 (merge e8a620f) | verify=MY OWN: 42 WebP + icons read with image inspection, 30/30 unit incl. hero-asset contract | worktree /home/administrator/projects/Weather/worktrees/heroes removed, session retired | docs=ledger row 5 + appendix, architecture, testing
 LANDED | row=10 | sha=3cefa9f | verify=MY OWN: build 0, unit 30/30, 11 E2E passed/1 skipped | docs=ledger row 10
-LANDED | row=11 | sha=<pending final> | verify=MY OWN: mobile layout viewport pinned; tooltip clip fixed | docs=ledger row 11
+LANDED | row=11 | sha=7494314 + 909d490 | verify=MY OWN: mobile layout viewport pinned, tooltip unclipped, hero remount | docs=ledger rows 11-12
+
+GATE | tier=full | sha=909d490 | exit=0 | unit=30/30 (7 files) | e2e=11 passed, 1 skipped (opt-in live) | duration=27s | lock=acquired | log=.gate-logs/gate.log
 
 retired_branch=slice/heroes
-QUEUE | row=12 | full gate on final commit + record the numbers | src=docs/GATE.md
+QUEUE-CLOSED | row=12 | full gate on final commit — recorded above
 
 RECOVERY | repo=/home/administrator/projects/Weather | remote=none (owner rule) | branch=main | gate=bash scripts/gate.sh
 ```

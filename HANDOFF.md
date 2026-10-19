@@ -1,7 +1,11 @@
 # Handoff
 
-**State (2026-10-19T14:55Z):** feature-complete and verified in the working tree;
-the full gate run and the final record commit are the only steps left.
+**State (2026-10-19T14:52Z):** DONE and verified. Full gate on `909d490`:
+**exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped (opt-in live),
+27 s, lock acquired. Live contract check passed separately against the real
+Open-Meteo API (8 of 11 models had data; AIFS, GraphCast, BOM were offline).
+Screenshots reviewed by the dispatcher: desktop 1440, mobile 390, mobile chart,
+tooltip, and a live full-page render.
 
 ## What exists
 
@@ -32,11 +36,11 @@ push". There is no deploy step.
 
 ## What is next
 
-1. Run `bash scripts/gate.sh` once on the final commit; record tier, exit code,
-   counts and peak in the board.
-2. Update the board's `LANDED` lines with the final sha and the gate numbers.
-3. Nothing else is owed. Known, deliberate non-goals: no backend, no saved
-   accounts, no license file (owner decision), no deployment.
+Nothing is owed. The app is complete and tested. If a successor picks this up:
+
+1. Re-run `bash scripts/gate.sh` before changing anything (exit 9 = lock busy).
+2. Known, deliberate non-goals: no backend, no saved accounts, no license file
+   (owner decision), no deployment, no git remote.
 
 ## Traps already known
 

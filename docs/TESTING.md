@@ -22,7 +22,7 @@ Two tiers, one gate. `bash scripts/gate.sh`.
 | Unit | `tests/unit/cache.test.ts` | TTL, corrupt entries, storage that throws |
 | Unit | `tests/unit/hero-assets.test.ts` | all 14 hero families × 3 widths exist as real WebP; icons and manifest entries resolve |
 | E2E | `tests/e2e/*.spec.ts` | real UI at 390 px and 1440 px against recorded fixtures (deterministic, no live API) |
-| Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; run manually, record the numbers |
+| Live | `tests/e2e/live.spec.ts` (`LIVE=1`) | the real Open-Meteo contract still holds; waits for the mounted hero bitmap, records `artifacts/live-smoke.json` |
 
 ## Fixtures
 
