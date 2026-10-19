@@ -11,9 +11,11 @@ branch, worktree, session id, path.
 ## Board
 
 ```
-reconciled: main @ <sha> · 2026-10-19T14:30Z
+reconciled: main @ 63ce9a2 · 2026-10-19T14:31Z
 
-SESSION | id=dispatcher | model=deepseek-flash | state=dispatching
+SESSION | id=session-1afeb651 | model=deepseek-flash | state=dispatching
+
+IN-FLIGHT | row=5 | session=heroes-writer | worktree=/home/administrator/projects/Weather/worktrees/heroes | branch=slice/heroes | base=63ce9a2 | state=dispatched | scope=14 hero families + app icons, WebP 320/800/1600, docs row 5
 QUEUE | row=10 | UI shell: hero, model picker, hourly chart, daily strip, comparison | src=this file
 QUEUE | row=11 | Playwright E2E at 390/1440 + fixtures + offline | src=docs/TESTING.md
 QUEUE | row=12 | PWA polish, a11y, screenshots for dispatcher review | src=docs/ARCHITECTURE.md
