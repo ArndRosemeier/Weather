@@ -22,11 +22,26 @@ test('live Open-Meteo contract holds', async ({ page }) => {
 
   await page.goto('/')
   await page.getByTestId('hero-temp').waitFor({ timeout: 30_000 })
+  // Wait for the data-driven condition, then for the bitmap that is mounted AFTER
+  // it: the <img> remounts when the hero family changes, so a wait started too
+  // early resolves on the placeholder and screenshots a decoding image.
+  await expect(page.getByTestId('hero-condition')).not.toHaveText('No data')
+  await page.waitForTimeout(500)
+  const heroImage = await page.locator('.hero__image').evaluate(
+    (node) =>
+      new Promise<{ src: string; width: number }>((resolve) => {
+        const image = node as HTMLImageElement
+        const report = () => resolve({ src: image.currentSrc, width: image.naturalWidth })
+        if (image.complete && image.naturalWidth > 0) report()
+        else image.addEventListener('load', report, { once: true })
+      }),
+  )
+  expect(heroImage.width).toBeGreaterThan(0)
   await page.screenshot({ path: 'artifacts/live-desktop.png', fullPage: true })
 
   fs.mkdirSync('artifacts', { recursive: true })
   fs.writeFileSync(
     'artifacts/live-smoke.json',
-    JSON.stringify({ at: new Date().toISOString(), timezone: body.timezone, horizons, available: available.length }, null, 2),
+    JSON.stringify({ at: new Date().toISOString(), timezone: body.timezone, horizons, available: available.length, heroImage }, null, 2),
   )
 })

@@ -171,6 +171,8 @@ a { color: #a8c4ff; text-decoration-thickness: 1px; text-underline-offset: 2px; 
   object-position: center 42%;
   transform: scale(1.02);
 }
+/* The <img> is keyed by hero family: a key change remounts it, so the previous
+   condition's bitmap can never sit under a new label while the next one decodes. */
 .hero__shade {
   position: absolute;
   inset: 0;

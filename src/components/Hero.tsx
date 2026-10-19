@@ -36,6 +36,7 @@ export function Hero({ location, heroKey, temperatureC, apparentC, weatherCode, 
       <div className="hero__media" aria-hidden="true">
         <img
           className="hero__image"
+          key={heroKey}
           src={`/heroes/${heroKey}-1600.webp`}
           srcSet={`/heroes/${heroKey}-800.webp 800w, /heroes/${heroKey}-1600.webp 1600w`}
           sizes="100vw"
