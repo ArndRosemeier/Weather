@@ -1,8 +1,11 @@
 # Handoff
 
-**State (2026-10-19T14:52Z):** DONE and verified. Full gate on `909d490`:
-**exit 0**, 30/30 unit (7 files), 11 E2E passed / 1 skipped (opt-in live),
-27 s, lock acquired. Live contract check passed separately against the real
+**State (2026-10-19T14:53Z):** DONE and verified. Two journal records:
+full gate on `909d490` — **exit 0**, 30/30 unit (7 files), 11 E2E passed /
+1 skipped, 27 s, lock acquired; and cheap tier on `9c2965b` — **exit 2**,
+build green, suite intentionally not run because `909d490..9c2965b` is four
+docs files. Exit 2 is not a full pass; the behaviour evidence for this tree
+is the full run on the code-identical parent. Live contract check passed separately against the real
 Open-Meteo API (8 of 11 models had data; AIFS, GraphCast, BOM were offline).
 Screenshots reviewed by the dispatcher: desktop 1440, mobile 390, mobile chart,
 tooltip, and a live full-page render.

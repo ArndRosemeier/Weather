@@ -19,7 +19,9 @@ LANDED | row=5 | sha=66cbfb6 (merge e8a620f) | verify=MY OWN: 42 WebP + icons re
 LANDED | row=10 | sha=3cefa9f | verify=MY OWN: build 0, unit 30/30, 11 E2E passed/1 skipped | docs=ledger row 10
 LANDED | row=11 | sha=7494314 + 909d490 | verify=MY OWN: mobile layout viewport pinned, tooltip unclipped, hero remount | docs=ledger rows 11-12
 
-GATE | tier=full | sha=909d490 | exit=0 | unit=30/30 (7 files) | e2e=11 passed, 1 skipped (opt-in live) | duration=27s | lock=acquired | log=.gate-logs/gate.log
+GATE | tier=full | sha=909d490 | exit=0 | unit=30/30 (7 files) | e2e=11 passed, 1 skipped (opt-in live) | duration=27s | lock=acquired | log=.gate-logs/gate-full-909d490.log
+GATE | tier=cheap | sha=9c2965b | exit=2 | build green, SUITE DID NOT RUN by design — delta 909d490..9c2965b is four docs files (verified with git diff --name-only) | duration=2s | lock=none | log=.gate-logs/gate.log
+NOTE | exit 2 is not "the gate passed": behaviour evidence for this tree is the full run on 909d490; the code tree is identical, only prose changed.
 
 retired_branch=slice/heroes
 QUEUE-CLOSED | row=12 | full gate on final commit — recorded above
