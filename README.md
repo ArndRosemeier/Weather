@@ -66,6 +66,10 @@ model table for who that organisation is.
 - **Cache and offline.** Forecasts are cached in `localStorage` for 20 minutes; a
   service worker keeps the shell. An offline reload shows the last forecast with an
   explicit notice.
+- **Fresh on resume.** A phone PWA is usually resumed, not reloaded. Coming back to
+  the app — a visibility change, a back/forward-cache restore or a reconnect —
+  triggers one debounced refetch, so a resumed session never presents the last
+  session's numbers as current.
 
 ## Run it
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MODELS } from './lib/models'
 import { fetchForecast } from './lib/api'
 import { aggregateDaily, aggregateHourly } from './lib/average'
@@ -19,6 +19,7 @@ import { ErrorBanner, NoticeBanner } from './components/Banners'
 import { UiIcon } from './components/UiIcon'
 import { WhatsNew } from './components/WhatsNew'
 import { VERSION } from './lib/version'
+import { createResumeRefresh } from './lib/resume'
 import { conditionFor } from './lib/wmo'
 
 type RangeMode = '24h' | '48h' | 'all' | 'day'
@@ -43,6 +44,9 @@ export default function App() {
   const [locationOpen, setLocationOpen] = useState(false)
   const [whatsNewOpen, setWhatsNewOpen] = useState(false)
   const [attempt, setAttempt] = useState(0)
+  // One debounced resume trigger for the lifetime of the page: the installed PWA
+  // must refetch when it is shown again, not display the state from last time.
+  const resumeRefresh = useRef(createResumeRefresh(() => setAttempt((value) => value + 1)))
 
   const updateSettings = useCallback((patch: Partial<Settings>) => {
     setSettings((previous) => {
@@ -60,6 +64,26 @@ export default function App() {
     return () => {
       window.removeEventListener('online', onOnline)
       window.removeEventListener('offline', onOffline)
+    }
+  }, [])
+
+  useEffect(() => {
+    const trigger = resumeRefresh.current
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') trigger()
+    }
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) trigger()
+    }
+    const onReconnect = () => trigger()
+
+    document.addEventListener('visibilitychange', onVisibility)
+    window.addEventListener('pageshow', onPageShow)
+    window.addEventListener('online', onReconnect)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility)
+      window.removeEventListener('pageshow', onPageShow)
+      window.removeEventListener('online', onReconnect)
     }
   }, [])
 
