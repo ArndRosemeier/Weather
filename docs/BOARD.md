@@ -10,7 +10,7 @@ and the gate journal; this file carries the present.
 ## Board
 
 ```
-reconciled: local main @ 4a496e9 · origin/main @ 7d119dc · 2026-10-27T08:23+01:00
+reconciled: origin/main @ 7d119dc · local ahead at version 1.03 · 2026-10-27T09:21+01:00
 
 SESSION | id=session-1afeb651 | model=deepseek-flash | state=complete
 VERSION | 1.03 (src/data/version.json) | NEXT-PUSH 1.04 via `pnpm release`
@@ -21,8 +21,8 @@ GATE | tier=full | sha=4a496e9 | exit=0 | same suite | duration=35s | lock=acqui
 LANDED | row=23 | sha=0001983 | verify=MY OWN: gate above + resume E2E (visibility, bfcache, reconnect) + unit debounce | resumed PWA refetches instead of showing last session's state | docs=ledger row 23
 RECORD-FIX | row=24 | HANDOFF and BOARD had drifted (30/11 counts, rows 1–11, "no license", reconciled 63ce9a2, remote=none); both rewritten at 0001983 | docs=ledger row 24
 
-PUSH | origin=https://github.com/ArndRosemeier/Weather (public, MIT) | every pushed commit gated first; current sha = `git ls-remote origin refs/heads/main`
-PUSH-BLOCKED | 2026-10-27T08:22+01:00 | HEAD 4a496e9 → origin/main 7d119dc | exit 128 | "Permission to ArndRosemeier/Weather.git denied to ArndRosemeier" · 403 on write, `ls-remote` read OK | needs a token with write access (owner) | versions 1.03 + record commits are local only until then
+PUSH | origin=https://github.com/ArndRosemeier/Weather (public, MIT) | transport=SSH via the host's global `url.insteadOf` rewrite; remotes unchanged; no tokens or credential helpers | `ssh -T git@github.com` → "Hi ArndRosemeier!" | `git ls-remote origin` exit 0 | every pushed commit gated first
+PUSH-PENDING | 2026-10-27T09:21+01:00 | local HEAD (version 1.03 + record repairs) → origin/main 7d119dc | the earlier 403 was the pre-SSH token path, now withdrawn; this push is the SSH one; the pushed sha is the one `git ls-remote` reports
 LIVE | https://apps.futuremagic.de/weather/ (200) | lags HEAD until a separate publish run; deploying is outside this session's remit
 
 RECOVERY | repo=/home/administrator/projects/Weather | remote=https://github.com/ArndRosemeier/Weather | branch=main | gate=bash scripts/gate.sh

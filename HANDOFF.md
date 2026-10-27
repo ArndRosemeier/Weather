@@ -1,11 +1,13 @@
 # Handoff
 
-**State (2026-10-27T08:23+01:00 · 07:23Z):** DONE and verified **locally**, but
-**NOT PUSHED**. Latest full gate on `4a496e9`: **exit 0**, 47/47 unit (12 files),
-19 E2E passed / 1 skipped. Version **1.03** (resumed PWA refetches) plus the record
-repair are local-only: `git push` returns **403 — "Permission to
-ArndRosemeier/Weather.git denied to ArndRosemeier"** while `ls-remote` still reads.
-Local `4a496e9`, remote `7d119dc`. A token with write access is needed.
+**State (2026-10-27T09:20+01:00 · 08:20Z):** DONE and verified locally; the push
+path is now **SSH** (owner changed it): `ssh -T git@github.com` answers
+`Hi ArndRosemeier!`, `git ls-remote origin` exits 0, and `github.com` URLs are
+rewritten by `url.insteadOf` in `~/.gitconfig`. Remotes are unchanged and no token
+or credential helper is used — the earlier 403 was the withdrawn token path.
+Version **1.03** (resumed PWA refetches) plus record repairs are pending the SSH
+push. Latest full gate on `4a496e9`: **exit 0**, 47/47 unit (12 files), 19 E2E
+passed / 1 skipped.
 
 The earlier record in this file **and** in `docs/BOARD.md` had drifted (handoff
 claimed 30 unit tests, rows 1–11, "no license"; the board was reconciled at
