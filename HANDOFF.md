@@ -5,9 +5,9 @@ path is now **SSH** (owner changed it): `ssh -T git@github.com` answers
 `Hi ArndRosemeier!`, `git ls-remote origin` exits 0, and `github.com` URLs are
 rewritten by `url.insteadOf` in `~/.gitconfig`. Remotes are unchanged and no token
 or credential helper is used — the earlier 403 was the withdrawn token path.
-Version **1.03** (resumed PWA refetches) plus record repairs are pending the SSH
-push. Latest full gate on `4a496e9`: **exit 0**, 47/47 unit (12 files), 19 E2E
-passed / 1 skipped.
+Version **1.03** (resumed PWA refetches) plus the record repairs are **pushed**:
+`7d119dc..fd79401`, local == remote. Latest full gate: **exit 0**, 47/47 unit
+(12 files), 19 E2E passed / 1 skipped. Next version is **1.04**.
 
 The earlier record in this file **and** in `docs/BOARD.md` had drifted (handoff
 claimed 30 unit tests, rows 1–11, "no license"; the board was reconciled at
