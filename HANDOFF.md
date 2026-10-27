@@ -7,7 +7,9 @@ rewritten by `url.insteadOf` in `~/.gitconfig`. Remotes are unchanged and no tok
 or credential helper is used — the earlier 403 was the withdrawn token path.
 Version **1.03** (resumed PWA refetches) plus the record repairs are **pushed**:
 `7d119dc..fd79401`, local == remote. Latest full gate: **exit 0**, 47/47 unit
-(12 files), 19 E2E passed / 1 skipped. Next version is **1.04**.
+(12 files), 19 E2E passed / 1 skipped. Version **1.04** persists the push
+procedure in [`docs/PUSHING.md`](docs/PUSHING.md) so any agent can push without a
+token. Next version is **1.05**.
 
 The earlier record in this file **and** in `docs/BOARD.md` had drifted (handoff
 claimed 30 unit tests, rows 1–11, "no license"; the board was reconciled at
@@ -16,13 +18,21 @@ claimed 30 unit tests, rows 1–11, "no license"; the board was reconciled at
 **Version rule (owner):** the visible version rises by **0.01 on every push**.
 Before the next push: `pnpm release --title "…" --note "…"` (writes
 `src/data/version.json` and `package.json`), then commit, gate, push.
-**Next version is 1.04.**
+**Next version is 1.05.**
 
 `origin` is `https://github.com/ArndRosemeier/Weather` (public, MIT). Live at
 `https://apps.futuremagic.de/weather/`, but the deployed build lags HEAD until a
 separate publish run — deploying is outside this session's remit. Every commit that
 reaches `main` is pushed only after its own full gate; `git ls-remote origin
 refs/heads/main` is the authority for the current sha.
+
+## Pushing
+
+Read [`docs/PUSHING.md`](docs/PUSHING.md). In short: SSH via the host's global
+`url.insteadOf`; `ssh -T git@github.com` must answer `Hi ArndRosemeier!`; never add a
+token or credential helper for github.com (and never overwrite `~/.git-credentials`,
+which also holds an OpenClaw credential); bump the version with `pnpm release`; gate;
+`git push origin HEAD:main`; then quote both equal SHAs.
 
 ## What exists
 
@@ -43,7 +53,7 @@ refs/heads/main` is the authority for the current sha.
   (`pnpm test:e2e`, `LIVE=1`). Playwright drives system Chrome against recorded
   fixtures — including a real capture with three models offline.
 - **Docs**: `README.md`, `docs/ARCHITECTURE.md` (seam index + data contract),
-  `docs/TESTING.md`, `docs/DECISION-LEDGER.md` (rows 1–24), this file, board.
+  `docs/TESTING.md`, `docs/DECISION-LEDGER.md` (rows 1–27), this file, board.
 
 ## How to run
 

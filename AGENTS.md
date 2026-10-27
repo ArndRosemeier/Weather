@@ -62,10 +62,10 @@ pnpm heroes              # regenerate hero art (or image, Meta Muse)
 - **Push only on the owner's explicit instruction; never deploy.** A `git push` to
   `origin/main` is allowed when he asks. Deploying, publishing to a static host, or
   force-pushing `main` remains forbidden.
-- **GitHub auth is SSH, globally rewritten.** `github.com` URLs are rewritten by
-  `url.insteadOf` in `~/.gitconfig`; a push uses the host SSH key. Never add a token
-  or credential helper for github.com, and never edit `~/.ssh/config` or the global
-  git config. Verify with `ssh -T git@github.com` (expects `Hi ArndRosemeier!`).
+- **Pushing is SSH — read [`docs/PUSHING.md`](docs/PUSHING.md) first.** `github.com`
+  URLs are rewritten to SSH by the host's global `url.insteadOf`; no token or
+  credential helper is used, and `~/.ssh/config` and the global git config are
+  off-limits. Verify with `ssh -T git@github.com` (expects `Hi ArndRosemeier!`).
 - **Every push bumps the visible version by 0.01.** Run
   `pnpm release --title "…" --note "…"` before the final commit — it writes
   `src/data/version.json` (the What's-new history) and syncs `package.json`. Never
