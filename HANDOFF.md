@@ -1,9 +1,11 @@
 # Handoff
 
-**State (2026-10-27T08:16+01:00 · 07:16Z):** DONE, verified and pushed. Latest full
-gate on `0001983`: **exit 0**, 47/47 unit (12 files), 19 E2E passed / 1 skipped,
-41 s. That landing is **version 1.03**: a resumed PWA refetches instead of showing
-the state from its last opening.
+**State (2026-10-27T08:23+01:00 · 07:23Z):** DONE and verified **locally**, but
+**NOT PUSHED**. Latest full gate on `4a496e9`: **exit 0**, 47/47 unit (12 files),
+19 E2E passed / 1 skipped. Version **1.03** (resumed PWA refetches) plus the record
+repair are local-only: `git push` returns **403 — "Permission to
+ArndRosemeier/Weather.git denied to ArndRosemeier"** while `ls-remote` still reads.
+Local `4a496e9`, remote `7d119dc`. A token with write access is needed.
 
 The earlier record in this file **and** in `docs/BOARD.md` had drifted (handoff
 claimed 30 unit tests, rows 1–11, "no license"; the board was reconciled at
