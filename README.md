@@ -84,7 +84,7 @@ pnpm preview      # http://localhost:4173/weather/
 
 ```bash
 bash scripts/gate.sh            # the gate: build + unit + Playwright (exit 0 green)
-pnpm test:unit                  # 45 unit tests
+pnpm test:unit                  # 47 unit tests
 pnpm test:e2e                   # Playwright, 1440 px desktop and 390 px phone
 LIVE=1 pnpm test:e2e            # opt-in live contract check against Open-Meteo
 ```
