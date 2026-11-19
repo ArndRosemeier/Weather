@@ -60,6 +60,7 @@ export interface RawForecast {
   reason?: string
   timezone?: string
   utc_offset_seconds?: number
+  elevation?: number
   hourly?: RawSeries
   daily?: RawSeries
 }
@@ -155,6 +156,7 @@ export function parseForecast(raw: unknown, location: WeatherLocation, modelIds:
   return {
     location,
     timezone: body.timezone ?? location.timezone ?? 'UTC',
+    elevation: typeof body.elevation === 'number' ? body.elevation : null,
     utcOffsetSeconds: body.utc_offset_seconds ?? 0,
     fetchedAt,
     hourlyTimes,

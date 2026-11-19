@@ -110,6 +110,18 @@ test('changing the horizon changes the view without refetching', async ({ page }
   expect(forecastRequests).toBe(afterBoot)
 })
 
+test('a high-altitude place shows its elevation and warns', async ({ page }) => {
+  await boot(page)
+  await page.locator('.hero__place').click()
+  await page.getByLabel('Search for a location').fill('Gran Canaria')
+  await page.getByRole('button', { name: /Gran Canaria/ }).first().click()
+
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.locator('.hero__place')).toContainText('1,682 m')
+  await expect(page.getByText(/1,682 m above sea level/)).toBeVisible()
+  await page.screenshot({ path: 'artifacts/desktop-high-point.png' })
+})
+
 test('provider names explain the organisation behind a model', async ({ page }) => {
   await boot(page)
   const trigger = page.locator('[data-testid="provider-trigger"][data-provider-id="ecmwf"]').first()

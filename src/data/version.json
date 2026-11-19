@@ -1,6 +1,16 @@
 {
-  "version": "1.04",
+  "version": "1.05",
   "history": [
+    {
+      "version": "1.05",
+      "date": "2026-11-19",
+      "title": "High ground is labelled",
+      "changes": [
+        "Search results and the hero show a place's elevation in metres",
+        "Above 500 m a warning explains mountain weather versus the coast",
+        "Fixes the Gran Canaria case: the island centre is 1,682 m, not the beach"
+      ]
+    },
     {
       "version": "1.04",
       "date": "2026-10-27",

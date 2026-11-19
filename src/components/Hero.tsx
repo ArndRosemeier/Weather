@@ -3,6 +3,7 @@ import { conditionFor } from '../lib/wmo'
 import { formatTemp, tempUnit } from '../lib/units'
 import type { UnitSystem, WeatherLocation } from '../lib/types'
 import { locationLabel } from '../lib/geocode'
+import { formatElevation } from '../lib/elevation'
 import { UiIcon } from './UiIcon'
 
 interface HeroModel {
@@ -18,6 +19,7 @@ interface Props {
   temperatureC: number | null
   apparentC: number | null
   weatherCode: number | null
+  elevation: number | null
   system: UnitSystem
   contributing: number
   selectedCount: number
@@ -27,7 +29,7 @@ interface Props {
   onOpenLocation: () => void
 }
 
-export function Hero({ location, heroKey, temperatureC, apparentC, weatherCode, system, contributing, selectedCount, spreadC, models, loading, onOpenLocation }: Props) {
+export function Hero({ location, heroKey, temperatureC, apparentC, weatherCode, elevation, system, contributing, selectedCount, spreadC, models, loading, onOpenLocation }: Props) {
   const condition = conditionFor(weatherCode)
   const spread = spreadC.min !== null && spreadC.max !== null ? `${Math.round(spreadC.min)}–${Math.round(spreadC.max)}${tempUnit(system)}` : null
 
@@ -51,6 +53,7 @@ export function Hero({ location, heroKey, temperatureC, apparentC, weatherCode, 
         <button type="button" className="hero__place" onClick={onOpenLocation}>
           <UiIcon name="location" size={16} />
           <span id="hero-place">{locationLabel(location)}</span>
+          {elevation !== null && <span className="hero__elevation">{formatElevation(elevation)}</span>}
           <UiIcon name="chevron" size={14} className="hero__chevron" />
         </button>
 

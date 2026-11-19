@@ -16,6 +16,7 @@ function bundle(): ForecastBundle {
   return {
     location: { name: 'Berlin', latitude: 52.5244, longitude: 13.4105 },
     timezone: 'Europe/Berlin',
+    elevation: 74,
     utcOffsetSeconds: 7200,
     fetchedAt: Date.now(),
     hourlyTimes: Array.from({ length: 168 }, (_, i) => `2026-01-01T${String(i % 24).padStart(2, '0')}:00`),

@@ -39,6 +39,7 @@ public/sw.js                     offline shell only — never API data
 | Explain a provider | `src/lib/providers.ts` + `ProviderTooltip` | One entry per organisation, keyed by `ModelInfo.providerId`; the tooltip opens on hover and focus in a portal (the table's scroller would clip it) and must never be the only place a fact exists. |
 | Bump the version | `scripts/release.mjs` | The ONLY writer of `src/data/version.json`; +0.01 per push, syncs `package.json` semver (`1.00 → 1.0.0`, `1.01 → 1.0.1`, `1.10 → 1.1.0`). Never hand-edit; the app only reads. |
 | Refresh when the app is shown again | `src/lib/resume.ts` | ONE debounced trigger; `visibilitychange`, `pageshow(persisted)` and `online` call it. Never fetch directly from an event handler — a PWA resume fires several of these at once. |
+| Explain a high point | `src/lib/elevation.ts` | `elevationOf(location, bundle)` prefers the geocoder's value, falls back to the API response; `≥ 500 m` triggers the warning. The forecast is correct for the point — the label is what prevents a mountain centre being read as a beach. |
 | Cache a forecast | `src/lib/cache.ts` | TTL 20 min; stale data is shown with a notice, never silently refreshed. |
 | Render an error | `src/components/ErrorBanner.tsx` | Fed by `App`'s single `error` state. |
 | Generate hero art | `scripts/generate-heroes.mjs` | Prompts live in the script; output is WebP at 1600/800/320 (1600×1067, 3:2). Never hand-edit `public/heroes/` — regenerate. |

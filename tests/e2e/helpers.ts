@@ -77,6 +77,7 @@ export async function boot(page: Page, options: BootOptions = {}): Promise<void>
         results: [
           { id: 1, name: 'Oxford', country: 'United Kingdom', admin1: 'England', latitude: 51.7522, longitude: -1.25596, timezone: 'Europe/London' },
           { id: 2, name: 'Oxford', country: 'United States', admin1: 'Ohio', latitude: 39.50699, longitude: -84.74523, timezone: 'America/New_York' },
+          { id: 3, name: 'Gran Canaria', country: 'Spain', admin1: 'Canary Islands', latitude: 27.97257, longitude: -15.58685, timezone: 'Atlantic/Canary', elevation: 1682 },
         ],
       }),
     }),

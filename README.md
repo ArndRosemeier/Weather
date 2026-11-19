@@ -63,6 +63,10 @@ model table for who that organisation is.
   the comparison table says how many days that model actually covers, and switching
   7 / 10 / 16 is instant with no refetch. Past ten days the models disagree sharply,
   so the spread matters more than the average.
+- **High ground is labelled.** Every location shows its elevation; above 500 m a
+  warning explains that the forecast is for that altitude, not the coast. “Gran
+  Canaria” is the island centre at 1,682 m — the coast can be 10 °C warmer. Search a
+  town or use “Use my location” for beach-level conditions.
 - **Cache and offline.** Forecasts are cached in `localStorage` for 20 minutes; a
   service worker keeps the shell. An offline reload shows the last forecast with an
   explicit notice.

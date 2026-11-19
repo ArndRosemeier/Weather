@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { PRESET_LOCATIONS, searchLocations, type GeoResult } from '../lib/geocode'
 import { locationLabel } from '../lib/geocode'
+import { formatElevation } from '../lib/elevation'
 import type { WeatherLocation } from '../lib/types'
 import { UiIcon } from './UiIcon'
 
@@ -122,6 +123,11 @@ export function LocationSearch({ open, onClose, onSelect, recent, onError }: Pro
           />
         </div>
 
+        <p className="search__hint">
+          Island and region names point at their centre, which can be high ground. Check the elevation, or use
+          your location.
+        </p>
+
         <div className="sheet__body">
           {query.trim().length >= 2 && (
             <section aria-label="Search results" className="search__results">
@@ -130,7 +136,10 @@ export function LocationSearch({ open, onClose, onSelect, recent, onError }: Pro
               {results.map((result) => (
                 <button key={`${result.id}-${result.latitude}`} type="button" className="result" onClick={() => choose(result)}>
                   <span className="result__name">{result.name}</span>
-                  <span className="result__meta">{[result.admin1, result.country].filter(Boolean).join(', ')}</span>
+                  <span className="result__meta">
+                    {[result.admin1, result.country].filter(Boolean).join(', ')}
+                    {result.elevation !== undefined ? ` · ${formatElevation(result.elevation)}` : ''}
+                  </span>
                   <span className="result__coords">{result.latitude.toFixed(2)}, {result.longitude.toFixed(2)}</span>
                 </button>
               ))}

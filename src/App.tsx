@@ -20,6 +20,7 @@ import { UiIcon } from './components/UiIcon'
 import { WhatsNew } from './components/WhatsNew'
 import { VERSION } from './lib/version'
 import { createResumeRefresh } from './lib/resume'
+import { elevationOf, formatElevation, isHighPoint } from './lib/elevation'
 import { conditionFor } from './lib/wmo'
 
 type RangeMode = '24h' | '48h' | 'all' | 'day'
@@ -169,6 +170,8 @@ export default function App() {
     [bundle, availableModels, days],
   )
   const now = aggregate[nowIndex]
+  const elevation = elevationOf(settings.location, bundle)
+  const highPoint = isHighPoint(elevation)
 
   const firstDaily = availableModels[0]?.daily[0]
   const daylight = bundle ? isDaylight(bundle.hourlyTimes[nowIndex] ?? '', firstDaily?.sunrise ?? null, firstDaily?.sunset ?? null) : true
@@ -254,6 +257,12 @@ export default function App() {
       {error && <ErrorBanner message={error} onRetry={refresh} onDismiss={() => setError(null)} />}
       {!online && <NoticeBanner>You are offline — showing the last forecast saved on this device.</NoticeBanner>}
       {cacheNotice && <NoticeBanner>{cacheNotice}</NoticeBanner>}
+      {highPoint && elevation !== null && (
+        <NoticeBanner>
+          {settings.location.name} is {formatElevation(elevation)} above sea level — mountain weather can differ
+          sharply from the coast. Search a town, or use “Use my location”.
+        </NoticeBanner>
+      )}
 
       <Hero
         location={settings.location}
@@ -261,6 +270,7 @@ export default function App() {
         temperatureC={now?.temperature ?? null}
         apparentC={now?.apparentTemperature ?? null}
         weatherCode={now?.weatherCode ?? null}
+        elevation={elevation}
         system={settings.system}
         contributing={now?.contributing ?? 0}
         selectedCount={selectedModels.length}

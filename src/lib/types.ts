@@ -65,11 +65,14 @@ export interface WeatherLocation {
   latitude: number
   longitude: number
   timezone?: string
+  /** metres above sea level, when the geocoder or the forecast knows it */
+  elevation?: number
 }
 
 export interface ForecastBundle {
   location: WeatherLocation
   timezone: string
+  elevation: number | null
   utcOffsetSeconds: number
   fetchedAt: number
   hourlyTimes: string[]

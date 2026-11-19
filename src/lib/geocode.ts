@@ -22,6 +22,7 @@ interface RawGeoResponse {
     latitude: number
     longitude: number
     timezone?: string
+    elevation?: number
   }[]
 }
 
@@ -43,6 +44,7 @@ export async function searchLocations(query: string, signal?: AbortSignal): Prom
       latitude: entry.latitude,
       longitude: entry.longitude,
       timezone: entry.timezone,
+      elevation: typeof entry.elevation === 'number' ? entry.elevation : undefined,
     }))
 }
 
